@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="commons/fragments :: head(~{::title})">
+    <title>搜索结果</title>
+</head>
+
+<body>
+<!-- 引入导航栏 -->
+<nav th:replace="commons/fragments :: menu(0)"></nav>
+
+<!--中间内容-->
+<div id="waypoint" class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <!-- 头部 -->
+        <div class="ui top attached segment">
+            <div class="ui middle aligned two column grid">
+                <div class="column">
+                    <h3 class="ui teal header">搜索结果</h3>
+                </div>
+                <div class="right aligned column">
+                    共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${page.totalElements}"></h2> 篇
+                </div>
+            </div>
+        </div>
+
+        <div class="ui top attached teal segment">
+            <div class="ui padded vertical segment m-padded-tb-large" th:each="blog : ${page.content}">
+                <div class="ui middle aligned mobile reversed stackable grid">
+                    <div class="eleven wide column">
+                        <!-- 标题 -->
+                        <h3 class="ui header">
+                            <a th:href="@{/blog/{id}(id=${blog.id})}" target="_blank" class="m-black" th:text="${blog.title}"></a>
+                        </h3>
+                        <!-- 博客描述 -->
+                        <p class="m-text" th:text="${blog.description}"></p>
+                        <div class="ui grid">
+                            <div class="eleven wide column">
+                                <div class="ui mini horizontal link list">
+                                    <div class="item">
+                                        <!-- 头像 -->
+                                        <img th:src="@{${blog.user.avatar}}" alt="" class="ui avatar image">
+                                        <!-- 昵称 -->
+                                        <div class="content"><a href="#" class="header" th:text="${blog.user.nickname}"></a></div>
+                                    </div>
+                                    <!-- 更新时间 -->
+                                    <div class="item">
+                                        <i class="calendar icon"></i><span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}"></span>
+                                    </div>
+                                    <!-- 阅读量 -->
+                                    <div class="item">
+                                        <i class="eye icon"></i><span th:text="${blog.views}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 所属分类 -->
+                            <div class="right aligned five wide column">
+                                <a target="_blank" class="ui teal basic label m-padded-tiny m-text-thin" th:text="${blog.type.name}"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 文章首页展示图 -->
+                    <div class="five wide column">
+                        <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank">
+                            <img th:src="@{${blog.firstPicture}}" alt="" class="ui rounded image">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 分页列表 -->
+        <div class="ui bottom attached segment" th:if="${page.totalPages}>1">
+            <div class="ui middle aligned two column grid">
+                <div class="column">
+                    <a href="#" th:href="@{/(page=${page.number}-1)}" th:unless="${page.first}" class="ui mini teal basic button">上一页</a>
+                </div>
+                <div class="right aligned column">
+                    <a href="#" th:href="@{/(page=${page.number}+1)}" th:unless="${page.last}" class="ui mini teal basic button">下一页</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 回到顶部 -->
+<div id="toolbar" class="m-padded m-fixed m-right-bottom" style="display: none">
+    <div class="ui error vertical icon buttons">
+        <div id="toTop-button" class="ui red icon button"><i class="chevron up icon"></i></div>
+    </div>
+</div>
+
+<br><br>
+<!-- 引入底部footer -->
+<footer th:replace="commons/fragments :: footer"></footer>
+
+<!-- 引入js -->
+<th:block th:replace="commons/fragments :: script"></th:block>
+
+<script>
+    // 初始化滚动侦测插件（在顶部隐藏）
+    var waypoint;
+    waypoint = new Waypoint({
+        // waypoint是被侦测的部分，当此部分到顶时隐藏toolbar
+        element: document.getElementById('waypoint'),
+        handler: function (direction) {
+            if (direction === 'down') {
+                $('#toolbar').show(100);
+            } else {
+                $('#toolbar').hide(500);
+            }
+            console.log('Scrolled to waypoint! ' + direction);
+        }
+    });
+
+    // 点击回到顶部，设置间隔时间
+    $('#toTop-button').click(function () {
+        $(window).scrollTo(0, 600);
+    });
+
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+</script>
+</body>
+</html>

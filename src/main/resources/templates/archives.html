@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="commons/fragments :: head(~{::title})">
+    <title>归档</title>
+</head>
+
+<body>
+<!-- 引入导航栏 -->
+<nav th:replace="commons/fragments :: menu(4)"></nav>
+
+<!--中间内容-->
+<div id="waypoint" class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <!-- 头部 -->
+        <div class="ui top attached padded segment">
+            <div class="ui middle aligned two column grid">
+                <div class="column">
+                    <h3 class="ui teal header">归档</h3>
+                </div>
+                <div class="right aligned column">
+                    共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${blogCount}"></h2> 篇博客
+                </div>
+            </div>
+        </div>
+        <!-- 按年份展示博客列表区 -->
+        <th:block th:each="item : ${archiveMap}">
+            <!-- 年份 -->
+            <h3 class="ui center aligned header" th:text="${item.key}"></h3>
+            <div class="ui fluid vertical menu">
+                <a th:href="@{/blog/{id}(id=${blog.id})}" target="_blank" class="item" th:each="blog : ${item.value}">
+                    <span>
+                        <!-- 标题 -->
+                        <i class="mini teal circle icon"></i><span th:text="${blog.title}"></span>
+                        <!-- 日期 -->
+                        <div class="ui teal basic left pointing label m-padded-mini " th:text="${#dates.format(blog.updateTime,'MMMdd')}"></div>
+                    </span>
+                    <div class="ui orange basic left pointing label m-padded-mini " th:text="${blog.flag}"></div>
+                </a>
+            </div>
+        </th:block>
+    </div>
+</div>
+<!-- 回到顶部 -->
+<div id="toolbar" class="m-padded m-fixed m-right-bottom" style="display: none">
+    <div class="ui error vertical icon buttons">
+        <div id="toTop-button" class="ui red icon button"><i class="chevron up icon"></i></div>
+    </div>
+</div>
+
+<br><br>
+<!-- 引入底部footer -->
+<footer th:replace="commons/fragments :: footer"></footer>
+
+<!-- 引入js -->
+<th:block th:replace="commons/fragments :: script"></th:block>
+
+<script>
+    // 初始化滚动侦测插件（在顶部隐藏）
+    var waypoint;
+    waypoint = new Waypoint({
+        // waypoint是被侦测的部分，当此部分到顶时隐藏toolbar
+        element: document.getElementById('waypoint'),
+        handler: function (direction) {
+            if (direction === 'down') {
+                $('#toolbar').show(100);
+            } else {
+                $('#toolbar').hide(500);
+            }
+            console.log('Scrolled to waypoint! ' + direction);
+        }
+    });
+
+    // 点击回到顶部，设置间隔时间
+    $('#toTop-button').click(function () {
+        $(window).scrollTo(0, 600);
+    });
+
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+</script>
+</body>
+</html>

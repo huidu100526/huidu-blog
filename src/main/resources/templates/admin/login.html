@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="commons/fragments_admin :: head(~{::title})">
+    <title>博客管理登陆</title>
+</head>
+
+<body>
+<br><br><br>
+<div class="m-container-small m-padded-tb-massive" style="max-width: 30em !important;">
+    <div class="ur container">
+        <div class="ui middle aligned center aligned grid">
+            <div class="column">
+                <h2 class="ui teal image header">
+                    <div class="content">管理后台登录</div>
+                </h2>
+                <form id="loginForm" class="ui large form" method="post" action="#" th:action="@{/admin/login}">
+                    <div class="ui  segment">
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" id="username" name="username" placeholder="用户名">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                <input type="password" id="password" name="password" placeholder="密码">
+                            </div>
+                        </div>
+                        <button class="ui fluid large teal submit button">登 录</button>
+                    </div>
+                    <div class="ui error mini message"></div>
+                    <div class="ui mini negative message" th:unless="${#strings.isEmpty(message)}" th:text="${message}"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 引入js -->
+<th:block th:replace="commons/fragments_admin :: script"></th:block>
+
+<script>
+    // 登陆功能
+    // function dologin() {
+    //     var username = $("#username").val();
+    //     if (username === "") {
+    //         layer.msg("登陆账号不能为空", {time:2000, icon:2, shift:5}, function(){});
+    //         return;
+    //     }
+    //     var password = $("#password").val();
+    //     if (password === "") {
+    //         layer.msg("密码不能为空", {time:2000, icon:2, shift:5}, function(){});
+    //     }
+    //     $.ajax({
+    //         url: "/admin/login",
+    //         type: "POST",
+    //         data: {"username": username, "password": password},
+    //         success:function(result){
+    //             console.log(result);
+    //             if(result.code === 100){
+    //                 location.href="main";
+    //             }else if(result.code === 200){
+    //                 layer.msg(result.extend.msg, {time:2000, icon:2, shift:5}, function(){});
+    //             }
+    //         }
+    //     })
+    // }
+    // 表单校验
+    $("#loginForm").form({
+        fields: {
+            username: {
+                identifier: 'username',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入用户名'
+                }]
+            },
+            password: {
+                identifier: 'password',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入密码'
+                }]
+            }
+        }
+    });
+</script>
+</body>
+</html>

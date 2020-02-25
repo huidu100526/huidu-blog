@@ -1,0 +1,33 @@
+server:
+  # 项目端口
+  port: 8080
+
+spring:
+  # thymeleaf相关
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+    mode: HTML5
+  # 数据库连接设置
+  datasource:
+    url: jdbc:mysql://localhost:3306/huidu_blog?serverTimezone=UTC&characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+  jpa:
+    show-sql: false
+    # 设置为当实体类改变则相应更新数据库表
+    hibernate:
+      ddl-auto: update
+
+logging:
+  # 日志打印级别
+  level:
+    root: info
+    com.huidu.huidublog: debug
+  # 生成日志的位置，更目录下的log文件中生成
+  file: log/blog.log
+
+comment.avatar: /images/avatar.png

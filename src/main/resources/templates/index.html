@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="commons/fragments :: head(~{::title})">
+    <title>首页</title>
+</head>
+
+<body>
+<!-- 引入导航栏 -->
+<nav th:replace="commons/fragments :: menu(1)"></nav>
+
+<!-- 中间内容 -->
+<div id="waypoint" class="m-container m-padded-tb-big">
+    <div class="ui container">
+        <div class="ui stackable grid">
+            <!--左边博客列表-->
+            <div class="eleven wide column">
+                <!-- 列表头部 -->
+                <div class="ui top attached segment">
+                    <div class="ui middle aligned two column grid">
+                        <div class="column">
+                            <h3 class="ui teal header">博客</h3>
+                        </div>
+                        <div class="right aligned column">
+                            共 <h2 class="ui orange header m-inline-block m-text-thin" th:text="${page.totalElements}"></h2> 篇
+                        </div>
+                    </div>
+                </div>
+                <!-- 文章列表 -->
+                <div class="ui attached  segment">
+                    <div class="ui padded vertical segment m-padded-tb-large" th:each="blog : ${page.content}">
+                        <div class="ui middle aligned mobile reversed stackable grid">
+                            <div class="eleven wide column">
+                                <!-- 标题 -->
+                                <h3 class="ui header"><a href="#" th:href="@{/blog/{id}(id=${blog.id})}" class="m-black" th:text="${blog.title}"></a></h3>
+                                <!-- 博客描述 -->
+                                <p class="m-text" th:text="${blog.description}"></p>
+                                <!-- 头像等信息以及所属分类 -->
+                                <div class="ui grid">
+                                    <div class="eleven wide column">
+                                        <div class="ui mini horizontal link list">
+                                            <div class="item">
+                                                <!-- 头像 -->
+                                                <img th:src="@{${blog.user.avatar}}" alt="" class="ui avatar image">
+                                                <!-- 昵称 -->
+                                                <div class="content"><a href="#" class="header" th:text="${blog.user.nickname}"></a></div>
+                                            </div>
+                                            <!-- 发布时间 -->
+                                            <div class="item">
+                                                <i class="calendar icon"></i>
+                                                <span th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd')}"></span>
+                                            </div>
+                                            <!-- 阅读量 -->
+                                            <div class="item">
+                                                <i class="eye icon"></i><span th:text="${blog.views}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 所属分类 -->
+                                    <div class="right aligned five wide column">
+                                        <a th:text="${blog.type.name}" href="#" class="ui teal basic label m-padded-tiny m-text-thin"></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 文章首页展示图 -->
+                            <div class="five wide column">
+                                <a href="#" th:href="@{/blog/{id}(id=${blog.id})}">
+                                    <img th:src="@{${blog.firstPicture}}" alt="" class="ui rounded image">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 列表分页 -->
+                <div class="ui bottom attached segment" th:if="${page.totalPages}>1">
+                    <div class="ui middle aligned two column grid">
+                        <div class="column">
+                            <a href="#" th:href="@{/(page=${page.number}-1)}" th:unless="${page.first}" class="ui mini teal basic button">上一页</a>
+                        </div>
+                        <div class="right aligned column">
+                            <a href="#" th:href="@{/(page=${page.number}+1)}" th:unless="${page.last}" class="ui mini teal basic button">下一页</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 右边的top -->
+            <div class="five wide column">
+                <!-- 分类 -->
+                <div class="ui segments">
+                    <div class="ui secondary segment">
+                        <div class="ui two column grid">
+                            <div class="column">
+                                <i class="idea icon"></i>分类
+                            </div>
+                            <div class="right aligned column">
+                                <a href="#" th:href="@{types/-1}" target="_blank">more <i class="angle double right icon"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 分类名称和数量 -->
+                    <div class="ui teal segment">
+                        <div class="ui fluid vertical menu">
+                            <a href="#" th:href="@{/types/{id}(id=${type.id})}" class="item" th:each="type : ${types}">
+                                <span th:text="${type.name}"></span>
+                                <div class="ui teal basic left pointing label" th:text="${#arrays.length(type.blogs)}"></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 标签 -->
+                <div class="ui segments m-margin-top-large">
+                    <div class="ui secondary segment">
+                        <div class="ui two column grid">
+                            <div class="column">
+                                <i class="tags icon"></i>标签
+                            </div>
+                            <div class="right aligned column">
+                                <a href="#" th:href="@{tags/-1}" target="_blank">more <i class="angle double right icon"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 标签名称和数量 -->
+                    <div class="ui teal segment">
+                        <a href="#" th:href="@{/tags/{id}(id=${tag.id})}" th:each="tag : ${tags}" class="ui teal basic left pointing label m-margin-tb-tiny">
+                            <span th:text="${tag.name}"></span>
+                            <div class="detail" th:text="${#arrays.length(tag.blogs)}"></div>
+                        </a>
+                    </div>
+                </div>
+                <!-- 最新推荐文章 -->
+                <div class="ui segments m-margin-top-large">
+                    <div class="ui secondary segment ">
+                        <i class="bookmark icon"></i>最新推荐
+                    </div>
+                    <div class="ui segment" th:each="blog : ${recommendBlogs}">
+                        <a th:href="@{/blog/{id}(id=${blog.id})}" class="m-black m-text-thin" th:text="${blog.title}"></a>
+                    </div>
+                </div>
+                <!-- 二维码 -->
+                <h4 class="ui horizontal divider header m-margin-top-large">扫码关注我</h4>
+                <div class="ui centered card" style="width: 11em">
+                    <img th:src="@{/images/wechat.jpg}" alt="" class="ui rounded image">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 回到顶部 -->
+<div id="toolbar" class="m-padded m-fixed m-right-bottom" style="display: none">
+    <div class="ui error vertical icon buttons">
+        <div id="toTop-button" class="ui red icon button"><i class="chevron up icon"></i></div>
+    </div>
+</div>
+
+<br><br>
+<!-- 引入底部footer -->
+<footer th:replace="commons/fragments :: footer"></footer>
+
+<!-- 引入js -->
+<th:block th:replace="commons/fragments :: script"></th:block>
+
+<script>
+    // 初始化滚动侦测插件（在顶部隐藏）
+    var waypoint;
+    waypoint = new Waypoint({
+        // waypoint是被侦测的部分，当此部分到顶时隐藏toolbar
+        element: document.getElementById('waypoint'),
+        handler: function (direction) {
+            if (direction === 'down') {
+                $('#toolbar').show(100);
+            } else {
+                $('#toolbar').hide(500);
+            }
+            console.log('Scrolled to waypoint! ' + direction);
+        }
+    });
+
+    // 点击回到顶部，设置间隔时间
+    $('#toTop-button').click(function () {
+        $(window).scrollTo(0, 600);
+    });
+
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+</script>
+</body>
+</html>
