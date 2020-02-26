@@ -49,6 +49,7 @@ public class TagsController {
         return "admin/tags-input";
     }
 
+    // TODO 新增修改合为一
     /**
      * 新增标签
      */
@@ -70,17 +71,6 @@ public class TagsController {
             attributes.addFlashAttribute("message", "新增成功");
         }
         return "redirect:/admin/tags";
-    }
-
-    /**
-     * 编辑标签
-     */
-    @GetMapping("/tags/{id}/input")
-    public String editInput(@PathVariable Long id, Model model) {
-        // 根据id获取标签
-        Tag tag = tagService.getTag(id);
-        model.addAttribute("tag", tag);
-        return "admin/tags-input";
     }
 
     /**
@@ -107,9 +97,20 @@ public class TagsController {
     }
 
     /**
+     * 跳转至修改标签页面
+     */
+    @GetMapping("/tags/input/{id}")
+    public String editInput(@PathVariable Long id, Model model) {
+        // 根据id获取标签
+        Tag tag = tagService.getTag(id);
+        model.addAttribute("tag", tag);
+        return "admin/tags-input";
+    }
+
+    /**
      * 删除标签
      */
-    @GetMapping("/tags/{id}/delete")
+    @GetMapping("/tags/delete/{id}")
     public String delete(@PathVariable Long id, RedirectAttributes attributes) {
         tagService.deleteTag(id);
         attributes.addFlashAttribute("message", "删除成功");

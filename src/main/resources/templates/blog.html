@@ -198,29 +198,28 @@
 <th:block th:replace="commons/fragments :: script"></th:block>
 
 <script th:inline="javascript">
-    $('.menu.toggle').click(function () {
-        $('.m-item').toggleClass('m-mobile-hide');
-    });
-
+    // 赞赏按钮
     $('#payButton').popup({
         popup: $('.payQR.popup'),
         on: 'click',
         position: 'bottom center'
     });
 
+    // 目录显示
     $('.toc.button').popup({
         popup: $('.toc-container.popup'),
         on: 'click',
         position: 'left center'
     });
 
+    // 微信显示
     $('.wechat').popup({
         popup: $('.wechat-qr'),
         position: 'left center'
     });
 
     // 点击回到顶部，设置间隔时间
-    $('#toTop-button').click(function () {
+    $(document).on("click", "#toTop-button", function () {
         $(window).scrollTo(0, 600);
     });
 
@@ -268,12 +267,12 @@
     // 初始加载评论信息
     $(function () {
         // 请求路径
-        var url = /*[[@{/comments/{id}(id=${blog.id})}]]*/
+        var url = /*[[@{/comments/{id}(id=${blog.id})}]]*/"";
         $("#comment-container").load(url);
     });
 
     // 提交评论
-    $('#comment-btn').click(function () {
+    $(document).on("click", "#comment-btn", function () {
         var boo = $('.ui.form').form('validate form');
         if (boo) {
             console.log('校验成功');

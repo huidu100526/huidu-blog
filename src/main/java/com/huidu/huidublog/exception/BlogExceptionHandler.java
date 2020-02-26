@@ -1,4 +1,4 @@
-package com.huidu.huidublog.handler;
+package com.huidu.huidublog.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;

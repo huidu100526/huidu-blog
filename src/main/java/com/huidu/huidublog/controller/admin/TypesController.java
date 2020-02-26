@@ -49,6 +49,7 @@ public class TypesController {
         return "admin/types-input";
     }
 
+    // TODO 新增修改合为一
     /**
      * 新增分类
      */
@@ -70,17 +71,6 @@ public class TypesController {
             attributes.addFlashAttribute("message", "新增成功");
         }
         return "redirect:/admin/types";
-    }
-
-    /**
-     * 编辑分类
-     */
-    @GetMapping("/types/{id}/input")
-    public String editInput(@PathVariable Long id, Model model) {
-        // 根据分类id查询分类
-        Type type = typeService.getType(id);
-        model.addAttribute("type", type);
-        return "admin/types-input";
     }
 
     /**
@@ -108,9 +98,20 @@ public class TypesController {
     }
 
     /**
+     * 跳转至修改分类页面
+     */
+    @GetMapping("/types/input/{id}")
+    public String editInput(@PathVariable Long id, Model model) {
+        // 根据分类id查询分类
+        Type type = typeService.getType(id);
+        model.addAttribute("type", type);
+        return "admin/types-input";
+    }
+
+    /**
      * 删除分类
      */
-    @GetMapping("/types/{id}/delete")
+    @GetMapping("/types/delete/{id}")
     public String deleteType(@PathVariable Long id, RedirectAttributes attributes) {
         typeService.deleteType(id);
         attributes.addFlashAttribute("message", "删除成功");

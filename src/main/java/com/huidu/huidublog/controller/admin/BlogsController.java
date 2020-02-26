@@ -14,7 +14,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -41,7 +44,7 @@ public class BlogsController {
      * 跳转到博客列表页面，进行分页显示博客列表
      */
     @GetMapping("/blogs")
-    public String toblogsPage(@PageableDefault(size = 2, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
+    public String toblogsPage(@PageableDefault(size = 5, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
                               BlogQuery blog, Model model) {
         // 查询所有分类
         List<Type> listType = typeService.getListType();
@@ -50,43 +53,6 @@ public class BlogsController {
         model.addAttribute("page", listBlog);
         model.addAttribute("types", listType);
         return "admin/blogs";
-    }
-
-    /**
-     * 当进行条件搜索或下一页时，进行片段数据传递
-     */
-    @PostMapping("/blogs/search")
-    public String search(@PageableDefault(size = 2, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-                         BlogQuery blog, Model model) {
-        Page<Blog> listBlog = blogService.getListBlog(pageable, blog);
-        model.addAttribute("page", listBlog);
-        // 指定blogList片段，只刷新这个片段中的数据
-        return "admin/blogs :: blogList";
-    }
-
-    /**
-     * 跳转到新增博客页面
-     */
-    @GetMapping("/blogs/input")
-    public String input(Model model) {
-        // 获取到分类和标签
-        model.addAttribute("types", typeService.getListType());
-        model.addAttribute("tags", tagService.getListTag());
-        model.addAttribute("blog", new Blog());
-        return "admin/blogs-input";
-    }
-
-    /**
-     * 跳转到编辑博客页面
-     */
-    @GetMapping("/blogs/{id}/input")
-    public String editInput(@PathVariable Long id, Model model) {
-        model.addAttribute("types", typeService.getListType());
-        model.addAttribute("tags", tagService.getListTag());
-        Blog blog = blogService.getBlog(id);
-        blog.init();
-        model.addAttribute("blog", blog);
-        return "admin/blogs-input";
     }
 
     /**
@@ -114,9 +80,46 @@ public class BlogsController {
     }
 
     /**
+     * 当进行条件搜索或下一页时，进行片段数据传递
+     */
+    @PostMapping("/blogs/search")
+    public String search(@PageableDefault(size = 5, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
+                         BlogQuery blog, Model model) {
+        Page<Blog> listBlog = blogService.getListBlog(pageable, blog);
+        model.addAttribute("page", listBlog);
+        // 指定blogList片段，只刷新这个片段中的数据
+        return "admin/blogs :: blogList";
+    }
+
+    /**
+     * 跳转到新增博客页面
+     */
+    @GetMapping("/blogs/input")
+    public String input(Model model) {
+        // 获取到分类和标签
+        model.addAttribute("types", typeService.getListType());
+        model.addAttribute("tags", tagService.getListTag());
+        model.addAttribute("blog", new Blog());
+        return "admin/blogs-input";
+    }
+
+    /**
+     * 跳转到编辑博客页面
+     */
+    @GetMapping("/blogs/input/{id}")
+    public String editInput(@PathVariable Long id, Model model) {
+        model.addAttribute("types", typeService.getListType());
+        model.addAttribute("tags", tagService.getListTag());
+        Blog blog = blogService.getBlog(id);
+        blog.init();
+        model.addAttribute("blog", blog);
+        return "admin/blogs-input";
+    }
+
+    /**
      * 删除博客
      */
-    @GetMapping("/blogs/{id}/delete")
+    @GetMapping("/blogs/delete/{id}")
     public String delete(@PathVariable Long id, RedirectAttributes attributes) {
         blogService.deleteBlog(id);
         attributes.addFlashAttribute("message", "删除成功");

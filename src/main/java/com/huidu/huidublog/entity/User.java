@@ -1,5 +1,6 @@
 package com.huidu.huidublog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -62,6 +63,7 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateTime;
 
+    @JsonIgnore // 转换成json格式时防止循环序列化
     @OneToMany(mappedBy = "user")
     private List<Blog> blogs = new ArrayList<>();
 

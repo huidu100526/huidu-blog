@@ -22,7 +22,7 @@
 <div class="m-container-small m-padded-tb-big">
     <div class="ui container">
         <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
-            <i class="close icon"></i>
+            <i id="closeIcon" class="close icon"></i>
             <div class="header">提示：</div>
             <p th:text="${message}">恭喜，操作成功！</p>
         </div>
@@ -39,8 +39,8 @@
                 <td th:text="${iterStat.count}"></td>
                 <td th:text="${type.name}"></td>
                 <td>
-                    <a href="#" th:href="@{/admin/tags/{id}/input(id=${type.id})}" class="ui mini teal basic button">修改</a>
-                    <a href="#" th:href="@{/admin/tags/{id}/delete(id=${type.id})}" class="ui mini red basic button">删除</a>
+                    <a href="#" th:href="@{/admin/tags/input/{id}(id=${type.id})}" class="ui mini teal basic button">修改</a>
+                    <a href="#" th:href="@{/admin/tags/delete/{id}(id=${type.id})}" class="ui mini red basic button">删除</a>
                 </td>
             </tr>
             </tbody>
@@ -67,16 +67,8 @@
 <th:block th:replace="commons/fragments_admin :: script"></th:block>
 
 <script>
-    $('.menu.toggle').click(function () {
-        $('.m-item').toggleClass('m-mobile-hide');
-    });
-
-    $('.ui.dropdown').dropdown({
-        on: 'hover'
-    });
-
-    //消息提示关闭初始化
-    $('.message .close').click(function () {
+    // 消息提示关闭
+    $(document).on("click", "#closeIcon", function() {
         $(this).closest('.message').transition('fade');
     });
 </script>

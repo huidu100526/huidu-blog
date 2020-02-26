@@ -112,12 +112,8 @@
     });
 
     // 点击回到顶部，设置间隔时间
-    $('#toTop-button').click(function () {
+    $(document).on("click", "#toTop-button", function () {
         $(window).scrollTo(0, 600);
-    });
-
-    $('.menu.toggle').click(function () {
-        $('.m-item').toggleClass('m-mobile-hide');
     });
 </script>
 </body>

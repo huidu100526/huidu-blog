@@ -14,24 +14,22 @@
                 <h2 class="ui teal image header">
                     <div class="content">管理后台登录</div>
                 </h2>
-                <form id="loginForm" class="ui large form" method="post" action="#" th:action="@{/admin/login}">
-                    <div class="ui  segment">
+                <form id="loginForm" class="ui large form">
+                    <div class="ui segment">
                         <div class="field">
                             <div class="ui left icon input">
                                 <i class="user icon"></i>
-                                <input type="text" id="username" name="username" placeholder="用户名">
+                                <input type="text" id="username" name="username" placeholder="用户名"/>
                             </div>
                         </div>
                         <div class="field">
                             <div class="ui left icon input">
                                 <i class="lock icon"></i>
-                                <input type="password" id="password" name="password" placeholder="密码">
+                                <input type="password" id="password" name="password" placeholder="密码"/>
                             </div>
                         </div>
-                        <button class="ui fluid large teal submit button">登 录</button>
+                        <a onclick="dologin()" class="ui fluid large teal button">登 录</a>
                     </div>
-                    <div class="ui error mini message"></div>
-                    <div class="ui mini negative message" th:unless="${#strings.isEmpty(message)}" th:text="${message}"></div>
                 </form>
             </div>
         </div>
@@ -43,49 +41,35 @@
 
 <script>
     // 登陆功能
-    // function dologin() {
-    //     var username = $("#username").val();
-    //     if (username === "") {
-    //         layer.msg("登陆账号不能为空", {time:2000, icon:2, shift:5}, function(){});
-    //         return;
-    //     }
-    //     var password = $("#password").val();
-    //     if (password === "") {
-    //         layer.msg("密码不能为空", {time:2000, icon:2, shift:5}, function(){});
-    //     }
-    //     $.ajax({
-    //         url: "/admin/login",
-    //         type: "POST",
-    //         data: {"username": username, "password": password},
-    //         success:function(result){
-    //             console.log(result);
-    //             if(result.code === 100){
-    //                 location.href="main";
-    //             }else if(result.code === 200){
-    //                 layer.msg(result.extend.msg, {time:2000, icon:2, shift:5}, function(){});
-    //             }
-    //         }
-    //     })
-    // }
-    // 表单校验
-    $("#loginForm").form({
-        fields: {
-            username: {
-                identifier: 'username',
-                rules: [{
-                    type: 'empty',
-                    prompt: '请输入用户名'
-                }]
-            },
-            password: {
-                identifier: 'password',
-                rules: [{
-                    type: 'empty',
-                    prompt: '请输入密码'
-                }]
-            }
+    function dologin() {
+        var username = $("#username").val();
+        if (username.trim() === "") {
+            toastr.error("用户名不能为空");
+            // layer.msg("用户名不能为空", {time: 2000, icon: 2, shift: 5}, function () {});
+            return;
         }
-    });
+        var password = $("#password").val();
+        if (password.trim() === "") {
+            toastr.error("密码不能为空");
+            // layer.msg("密码不能为空", {time: 2000, icon: 2, shift: 5}, function () {});
+            return;
+        }
+        $.ajax({
+            url: "/admin/login",
+            type: "POST",
+            data: {"username": username, "password": password},
+            success: function (result) {
+                console.log(result);
+                if (result.code === 200) {
+                    // 成功后跳转至欢迎页
+                    location.href="admin/index";
+                } else if (result.code === 100) {
+                    // layer.msg(result.message, {time: 2000, icon: 2, shift: 5}, function () {});
+                    toastr.error(result.message);
+                }
+            }
+        })
+    }
 </script>
 </body>
 </html>
