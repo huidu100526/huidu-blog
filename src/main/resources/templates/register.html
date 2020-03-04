@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="commons/fragments :: head(~{::title})">
+    <title>注册</title>
+</head>
+
+<body>
+<!-- 引入导航栏 -->
+<nav th:replace="commons/fragments :: menu(0)"></nav>
+
+<br><br>
+<div class="m-container-small m-padded-tb-massive" style="max-width: 30em !important;">
+    <div class="ur container">
+        <div class="ui middle aligned center aligned grid">
+            <div class="column">
+                <h2 class="ui teal image header">
+                    <div class="content">注册</div>
+                </h2>
+                <form id="registerForm" class="ui large form">
+                    <div class="ui segment">
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" id="nickname" name="nickname" placeholder="昵称"/>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" id="username" name="username" placeholder="用户名"/>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                <input type="password" id="password" name="password" placeholder="密码"/>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="envelope icon"></i>
+                                <input type="text" id="email" name="email" placeholder="邮箱"/>
+                            </div>
+                        </div>
+                        <a onclick="doRegister()" class="ui fluid large teal button">注 册</a>
+                    </div>
+                </form>
+                <br>
+                <a href="/toLogin">
+                    <div class="ui floated animated button" tabindex="0" style="width: 30em !important;">
+                        <div class="visible content">已有账号？</div>
+                        <div class="hidden content">
+                            去登陆<i class="right arrow icon"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br><br><br><br><br><br><br>
+
+<!-- 引入底部footer -->
+<footer th:replace="commons/fragments :: footer"></footer>
+
+<!-- 引入js -->
+<th:block th:replace="commons/fragments :: script"></th:block>
+
+<script>
+    // 初始化layer
+    var layer;
+    layui.use('layer', function(){
+        layer = layui.layer;
+    });
+
+    // 注册功能
+    function doRegister() {
+        var nickname = $("#nickname").val();
+        if (nickname.trim() === "") {
+            layer.msg("昵称不能为空", {time: 1500, icon: 2, shift: 5}, function () {});
+            return;
+        } else if (nickname.length < 3 || nickname.length > 10) {
+            layer.msg("昵称长度3~10位", {time: 1500, icon: 2, shift: 5}, function () {});
+            return;
+        }
+        var username = $("#username").val();
+        if (username.trim() === "") {
+            layer.msg("用户名不能为空", {time: 1500, icon: 2, shift: 5}, function () {});
+            return;
+        } else if (username.length < 3 || username.length > 10) {
+            layer.msg("用户名长度3~10位", {time: 1500, icon: 2, shift: 5}, function () {});
+            return;
+        }
+        var password = $("#password").val();
+        if (password.trim() === "") {
+            layer.msg("用户名不能为空", {time: 1500, icon: 2, shift: 5}, function () {});
+            return;
+        }
+        var email = $("#email").val();
+        var checkemail = /^([a-z0-9_.-]+)@([\da-z.-]+)\.([a-z.]{2,6})$/;
+        if (email.trim() === "") {
+            layer.msg("邮箱不能为空", {time: 1500, icon: 2, shift: 5}, function () {});
+            return;
+        }
+        if (!checkemail.test(email)) {
+            layer.msg("请填写正确的邮箱", {time: 1500, icon: 2, shift: 5}, function () {});
+            return;
+        }
+        $.ajax({
+            url: "/register",
+            type: "POST",
+            data: {
+                "nickname": nickname,
+                "username": username,
+                "password": password,
+                "email": email
+            },
+            success: function (result) {
+                console.log(result);
+                if (result.code === 101) {
+                    // 成功后跳转至欢迎页
+                    layer.msg(result.message, {time: 2500, icon: 1, shift: 5}, function () {});
+                    // 情况表单内容
+                    $("#registerForm")[0].reset();
+                } else if (result.code === 204) {
+                    layer.msg(result.message, {time: 1500, icon: 2, shift: 5}, function () {});
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>

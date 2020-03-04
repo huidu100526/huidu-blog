@@ -1,7 +1,7 @@
 package com.huidu.huidublog.config;
 
-import com.huidu.huidublog.interceptor.LoginInterceptor;
-import org.springframework.context.annotation.Configuration;
+import com.huidu.huidublog.interceptor.BlogInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -10,13 +10,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @create 2020/2/22 16:01
  * @Description: 项目配置类
  */
-@Configuration
+//@Configuration
 public class BlogConfig implements WebMvcConfigurer {
     /**
-     * 配置拦截器，拦截所有admin相关路径，不拦截登陆
+     * 注册拦截器
+     */
+    @Bean
+    public BlogInterceptor loginInterceptor() {
+        return new BlogInterceptor();
+    }
+
+    /**
+     * 配置拦截器，拦截所有admin相关路径，不拦截admin登陆
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/admin/**").excludePathPatterns("/admin/login", "/admin");
+        registry.addInterceptor(loginInterceptor()).addPathPatterns("/admin/**").excludePathPatterns("/admin/login", "/admin");
     }
 }

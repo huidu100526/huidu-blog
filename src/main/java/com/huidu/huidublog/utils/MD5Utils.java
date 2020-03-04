@@ -9,23 +9,27 @@ import java.security.NoSuchAlgorithmException;
  * @Description: md5加密工具类
  */
 public class MD5Utils {
-    public static String md5(String str){
+    private static final String SALT = "huidu";
+
+    public static String md5(String str) {
         try {
+            str = str + SALT; // 加盐
             MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(str.getBytes());
-            byte[]byteDigest = md.digest();
-            int i;
-            StringBuilder buf = new StringBuilder("");
-            for (byte aByteDigest : byteDigest) {
-                i = aByteDigest;
-                if (i < 0) i += 256;
-                if (i < 16) buf.append("0");
-                buf.append(Integer.toHexString(i));
+            char[] charArray = str.toCharArray();
+            byte[] byteArray = new byte[charArray.length];
+            for (int i = 0; i < charArray.length; i++) {
+                byteArray[i] = (byte) charArray[i];
             }
-            //32位加密
-            return buf.toString();
-            // 16位的加密
-            //return buf.toString().substring(8, 24);
+            byte[] md5Bytes = md.digest(byteArray);
+            StringBuilder hexValue = new StringBuilder();
+            for (byte md5Byte : md5Bytes) {
+                int val = ((int) md5Byte) & 0xff;
+                if (val < 16) {
+                    hexValue.append("0");
+                }
+                hexValue.append(Integer.toHexString(val));
+            }
+            return hexValue.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             return null;

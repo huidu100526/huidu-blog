@@ -28,7 +28,7 @@ public interface BlogRepository extends JpaRepository<Blog, Long>, JpaSpecificat
     // 根据id修改博客中的访问量，每次累加1
     @Transactional
     @Modifying
-    @Query("update Blog b set b.views = b.views+1 where b.id = ?1")
+    @Query("update Blog b set b.views = b.views + 1 where b.id = ?1")
     void updateViews(Long id);
 
     // 根据年份分组查询博客列表
@@ -43,4 +43,10 @@ public interface BlogRepository extends JpaRepository<Blog, Long>, JpaSpecificat
     // 查询最新发布的博客
     @Query("select b from Blog b")
     List<Blog> findNewBlogTop(Pageable pageable);
+
+    // 根据id修改博客中的喜欢数，点赞
+    @Transactional
+    @Modifying
+    @Query("update Blog b set b.likes = b.likes + 1 where b.id = ?1")
+    void updateLikes(Long id);
 }

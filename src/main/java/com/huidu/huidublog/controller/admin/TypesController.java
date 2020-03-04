@@ -49,36 +49,11 @@ public class TypesController {
         return "admin/types-input";
     }
 
-    // TODO 新增修改合为一
     /**
-     * 新增分类
-     */
-    @PostMapping("/types")
-    public String post(@Valid Type type, BindingResult result, RedirectAttributes attributes) {
-        // 根据分类名获取分类，判断是否重复添加
-        Type type1 = typeService.getTypeByName(type.getName());
-        if (type1 != null) {
-            result.rejectValue("name", "nameError", "该分类已存在");
-        }
-        // 判断表单输入内容是否有误
-        if (result.hasErrors()) {
-            return "admin/types-input";
-        }
-        Type t = typeService.saveType(type);
-        if (t == null) {
-            attributes.addFlashAttribute("message", "新增失败");
-        } else {
-            attributes.addFlashAttribute("message", "新增成功");
-        }
-        return "redirect:/admin/types";
-    }
-
-    /**
-     * 修改分类
+     * 新增/修改分类
      */
     @PostMapping("/types/{id}")
-    public String editPost(@Valid Type type, BindingResult result, @PathVariable Long id,
-                           RedirectAttributes attributes) {
+    public String editPost(@Valid Type type, BindingResult result, @PathVariable Long id, RedirectAttributes attributes) {
         // 根据分类名获取分类，判断修改后的分类名是否存在
         Type type1 = typeService.getTypeByName(type.getName());
         if (type1 != null) {
@@ -87,11 +62,13 @@ public class TypesController {
         if (result.hasErrors()) {
             return "admin/types-input";
         }
-        // 修改分类
-        Type t = typeService.updateType(id, type);
-        if (t == null) {
-            attributes.addFlashAttribute("message", "修改失败");
+        if (id == 0) {
+            // 新增分类
+            Type t = typeService.saveType(type);
+            attributes.addFlashAttribute("message", "新增成功");
         } else {
+            // 修改分类
+            Type t = typeService.updateType(id, type);
             attributes.addFlashAttribute("message", "修改成功");
         }
         return "redirect:/admin/types";

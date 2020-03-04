@@ -1,7 +1,9 @@
 package com.huidu.huidublog.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.huidu.huidublog.enums.UserTypeEnum;
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -47,9 +49,9 @@ public class User {
     private String avatar;
 
     /**
-     * 用户类型：1、管理员    2、游客
+     * 用户类型
      */
-    private Integer type;
+    private Integer type = UserTypeEnum.USER.getCode();
 
     /**
      * 创建时间
@@ -63,8 +65,15 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateTime;
 
-    @JsonIgnore // 转换成json格式时防止循环序列化
-    @OneToMany(mappedBy = "user")
+    /**
+     * 角色
+     */
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Role> roles = new ArrayList<>();
+
+//    @JsonIgnore // 转换成json格式时防止循环序列化
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Blog> blogs = new ArrayList<>();
 
     public User() {

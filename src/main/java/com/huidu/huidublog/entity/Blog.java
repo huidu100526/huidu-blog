@@ -1,6 +1,8 @@
 package com.huidu.huidublog.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,6 +28,11 @@ public class Blog {
     private String title;
 
     /**
+     * 博客描述
+     */
+    private String description;
+
+    /**
      * 文章内容
      */
     @Basic(fetch = FetchType.LAZY) // 要使用时才加载
@@ -46,6 +53,11 @@ public class Blog {
      * 阅读次数
      */
     private Integer views;
+
+    /**
+     * 喜欢数
+     */
+    private Integer likes;
 
     /**
      * 是否开启赞赏
@@ -73,11 +85,6 @@ public class Blog {
     private boolean recommend;
 
     /**
-     * 博客描述
-     */
-    private String description;
-
-    /**
      * 发布时间
      */
     @Temporal(TemporalType.TIMESTAMP)
@@ -89,11 +96,11 @@ public class Blog {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateTime;
 
-    @OneToMany(mappedBy = "blog")
+    @OneToMany(mappedBy = "blog", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private List<Comment> comments = new ArrayList<>();
 
-//    @JsonIgnore
-    @ManyToMany(cascade = {CascadeType.PERSIST})
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<Tag> tags = new ArrayList<>();
 
     @ManyToOne

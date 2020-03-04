@@ -129,14 +129,13 @@
         </form>
     </div>
 </div>
+<br><br>
 
-<br>
-<br>
 <!-- 引入底部footer -->
-<footer th:replace="commons/fragments_admin :: footer"></footer>
+<footer th:replace="commons/fragments :: footer"></footer>
 
 <!-- 引入js -->
-<th:block th:replace="commons/fragments_admin :: script"></th:block>
+<th:block th:replace="commons/fragments :: script"></th:block>
 
 <script>
     //初始化Markdown编辑器
@@ -157,6 +156,7 @@
 
     // 保存
     $(document).on("click", "#save-btn", function() {
+        // 将是否发布设置为false，则是草稿
         $("#published").val(false);
         $("#blog-form").submit();
     });

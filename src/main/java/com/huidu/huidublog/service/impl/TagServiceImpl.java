@@ -28,8 +28,8 @@ public class TagServiceImpl implements TagService {
 
     @Transactional
     @Override
-    public Tag saveTag(Tag type) {
-        return tagRepository.save(type);
+    public Tag saveTag(Tag tag) {
+        return tagRepository.save(tag);
     }
 
     @Transactional
@@ -65,11 +65,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> getListTag(String ids) {
-        return tagRepository.findAllById(convertToList(ids));
-    }
-
-    // 将多个id转为列表
-    private List<Long> convertToList(String ids) {
+        // 将多个id转为列表
         List<Long> list = new ArrayList<>();
         if (!"".equals(ids) && ids != null) {
             String[] idarray = ids.split(",");
@@ -77,7 +73,7 @@ public class TagServiceImpl implements TagService {
                 list.add(new Long(anIdarray));
             }
         }
-        return list;
+        return tagRepository.findAllById(list);
     }
 
     @Transactional

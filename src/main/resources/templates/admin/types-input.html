@@ -13,7 +13,7 @@
     <div class="ui container">
         <div class="right menu">
             <a href="#" th:href="@{/admin/types/input}" class="active item">新增</a>
-            <a href="#" th:href="@{/admin/types}" class="teal  item">列表</a>
+            <a href="#" th:href="@{/admin/types}" class="teal item">列表</a>
         </div>
     </div>
 </div>
@@ -22,17 +22,16 @@
 <br><br>
 <div class="m-container-small m-padded-tb-big">
     <div class="ui container">
-        <form action="#" method="post" class="ui form" th:object="${type}"
-              th:action="*{id}==null ? @{/admin/types} : @{/admin/types/{id}(id=*{id})}">
+        <form method="post" class="ui form" th:object="${type}" th:action="@{/admin/types/{id}(id=(*{id} == null ? 0 : *{id}))}">
             <input type="hidden" name="id" th:value="*{id}">
-            <div class=" field">
+            <div class="field">
                 <div class="ui left labeled input">
                     <label class="ui teal basic label">名称</label>
                     <input type="text" name="name" placeholder="分类名称" th:value="*{name}">
                 </div>
             </div>
             <div class="ui error message"></div>
-            <div class="ui negative message" th:if="${#fields.hasErrors('name')}">
+            <div id="closeIcon" class="ui negative message" th:if="${#fields.hasErrors('name')}">
                 <i class="close icon"></i>
                 <div class="header">验证失败</div>
                 <p th:errors="*{name}"></p>
@@ -44,13 +43,13 @@
         </form>
     </div>
 </div>
-
 <br><br><br><br><br><br><br><br>
+
 <!-- 引入底部footer -->
-<footer th:replace="commons/fragments_admin :: footer"></footer>
+<footer th:replace="commons/fragments :: footer"></footer>
 
 <!-- 引入js -->
-<th:block th:replace="commons/fragments_admin :: script"></th:block>
+<th:block th:replace="commons/fragments :: script"></th:block>
 
 <script>
     $('.ui.form').form({
@@ -63,6 +62,11 @@
                 }]
             }
         }
+    });
+
+    // 消息提示关闭
+    $(document).on("click", "#closeIcon", function() {
+        $(this).closest('.message').transition('fade');
     });
 </script>
 </body>

@@ -49,36 +49,12 @@ public class TagsController {
         return "admin/tags-input";
     }
 
-    // TODO 新增修改合为一
     /**
-     * 新增标签
-     */
-    @PostMapping("/tags")
-    public String post(@Valid Tag tag, BindingResult result, RedirectAttributes attributes) {
-        // 根据标签名获取分类，判断是否重复添加
-        Tag tag1 = tagService.getTagByName(tag.getName());
-        if (tag1 != null) {
-            result.rejectValue("name", "nameError", "该标签已存在");
-        }
-        // 判断表单输入内容是否有误
-        if (result.hasErrors()) {
-            return "admin/tags-input";
-        }
-        Tag t = tagService.saveTag(tag);
-        if (t == null) {
-            attributes.addFlashAttribute("message", "新增失败");
-        } else {
-            attributes.addFlashAttribute("message", "新增成功");
-        }
-        return "redirect:/admin/tags";
-    }
-
-    /**
-     * 修改标签
+     * 新增/修改标签
      */
     @PostMapping("/tags/{id}")
     public String editPost(@Valid Tag tag, BindingResult result, @PathVariable Long id, RedirectAttributes attributes) {
-        // 根据标签名获取分类，判断是否重复添加
+        // 根据标签名获取标签，判断是否重复添加
         Tag tag1 = tagService.getTagByName(tag.getName());
         if (tag1 != null) {
             result.rejectValue("name", "nameError", "该标签已存在");
@@ -87,10 +63,13 @@ public class TagsController {
         if (result.hasErrors()) {
             return "admin/tags-input";
         }
-        Tag t = tagService.updateTag(id, tag);
-        if (t == null) {
-            attributes.addFlashAttribute("message", "修改失败");
+        if (id == 0) {
+            // 新增标签
+            Tag t = tagService.saveTag(tag);
+            attributes.addFlashAttribute("message", "新增成功");
         } else {
+            // 修改标签
+            Tag t = tagService.updateTag(id, tag);
             attributes.addFlashAttribute("message", "修改成功");
         }
         return "redirect:/admin/tags";

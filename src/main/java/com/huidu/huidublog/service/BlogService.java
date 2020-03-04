@@ -20,7 +20,7 @@ public interface BlogService {
     // 根据id查询博客(markdown转换为html)
     Blog getBlobAndConvert(Long id);
 
-    // 分页查询博客列表(有条件)
+    // 后台管理分页查询博客列表(有条件)
     Page<Blog> getListBlog(Pageable pageable, BlogQuery blog);
 
     // 首页搜索查询博客列表(有条件)
@@ -52,4 +52,10 @@ public interface BlogService {
 
     // 查询最新发布的三篇博客
     List<Blog> listNewBlogTop(Integer size);
+
+    // 根据博客id添加喜欢数
+    Integer addLikeByBlogId(Long blogId);
+
+    // 根据博客id减少喜欢数
+    Integer lessLikeByBlogId(Long blogId);
 }

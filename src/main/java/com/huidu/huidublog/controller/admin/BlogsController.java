@@ -7,6 +7,7 @@ import com.huidu.huidublog.entity.User;
 import com.huidu.huidublog.service.BlogService;
 import com.huidu.huidublog.service.TagService;
 import com.huidu.huidublog.service.TypeService;
+import com.huidu.huidublog.service.UserLikeBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,16 +41,18 @@ public class BlogsController {
     @Autowired
     private TagService tagService;
 
+    @Autowired
+    private UserLikeBlogService userLikeBlogService;
+
     /**
      * 跳转到博客列表页面，进行分页显示博客列表
      */
     @GetMapping("/blogs")
-    public String toblogsPage(@PageableDefault(size = 5, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-                              BlogQuery blog, Model model) {
+    public String toblogsPage(@PageableDefault(size = 5, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable, Model model) {
         // 查询所有分类
         List<Type> listType = typeService.getListType();
         // 分页查询所有博客
-        Page<Blog> listBlog = blogService.getListBlog(pageable, blog);
+        Page<Blog> listBlog = blogService.getListBlog(pageable);
         model.addAttribute("page", listBlog);
         model.addAttribute("types", listType);
         return "admin/blogs";
@@ -60,9 +63,9 @@ public class BlogsController {
      */
     @PostMapping("/blogs")
     public String post(Blog blog, RedirectAttributes attributes, HttpSession session) {
-        blog.setUser((User) session.getAttribute("user"));
-        blog.setType(typeService.getType(blog.getType().getId()));
-        blog.setTags(tagService.getListTag(blog.getTagIds()));
+        blog.setUser((User) session.getAttribute("user")); // 设置用户
+        blog.setType(typeService.getType(blog.getType().getId())); // 设置分类
+        blog.setTags(tagService.getListTag(blog.getTagIds())); // 设置标签
         Blog b;
         if (blog.getId() == null) {
             // 新增博客
@@ -122,18 +125,9 @@ public class BlogsController {
     @GetMapping("/blogs/delete/{id}")
     public String delete(@PathVariable Long id, RedirectAttributes attributes) {
         blogService.deleteBlog(id);
+        // 同时删除博客喜欢记录
+        userLikeBlogService.deleteBlogLikeByBolgId(id);
         attributes.addFlashAttribute("message", "删除成功");
         return "redirect:/admin/blogs";
-    }
-
-    /**
-     * 首页尾部用于获取最新发布的三篇博客
-     */
-    @GetMapping("/footer/newblog")
-    public String newblogs(Model model) {
-        // 查询最新发布的三篇博客
-        List<Blog> blogs = blogService.listNewBlogTop(3);
-        model.addAttribute("newblogs", blogs);
-        return "commons/fragments_admin :: newblogList";
     }
 }

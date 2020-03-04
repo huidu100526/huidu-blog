@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="commons/fragments :: head(~{::title})">
+    <title>登陆</title>
+</head>
+
+<body>
+<!-- 引入导航栏 -->
+<nav th:replace="commons/fragments :: menu(0)"></nav>
+
+<br><br>
+<div class="m-container-small m-padded-tb-massive" style="max-width: 30em !important;">
+    <div class="ur container">
+        <div class="ui middle aligned center aligned grid">
+            <div class="column">
+                <h2 class="ui teal image header">
+                    <div class="content">登录</div>
+                </h2>
+                <form th:action="@{/login}" method="post" id="loginForm" class="ui large form">
+                    <div class="ui segment">
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" id="username" name="username" placeholder="用户名"/>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                <input type="password" id="password" name="password" placeholder="密码"/>
+                            </div>
+                        </div>
+                        <button class="ui fluid large teal button">登 录</button>
+                    </div>
+                </form>
+                <br>
+                <a href="/toRegister">
+                    <div class="ui floated animated button" tabindex="0" style="width: 30em !important;">
+                        <div class="visible content">还没账号？</div>
+                        <div class="hidden content">
+                            去注册<i class="right arrow icon"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br><br><br><br><br><br><br>
+
+<!-- 引入底部footer -->
+<footer th:replace="commons/fragments :: footer"></footer>
+
+<!-- 引入js -->
+<th:block th:replace="commons/fragments :: script"></th:block>
+</body>
+</html>

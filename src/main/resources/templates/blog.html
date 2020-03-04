@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head th:replace="commons/fragments :: head(~{::title})">
     <title th:text="${blog.title}">博客详情</title>
@@ -50,20 +51,25 @@
             <div class="m-padded-lr-responsive">
                 <div class="ui basic teal left pointing label" th:each="tag : ${blog.tags}" th:text="${tag.name}"></div>
             </div>
-            <!-- 赞赏 -->
+            <!-- 喜欢、赞赏 -->
             <div th:if="${blog.appreciation}">
                 <div class="ui center aligned basic segment">
+                    <div class="ui labeled button">
+                        <a id="like-btn" class="circular ui button" th:classappend="${userLike} ? 'red'"><i class="heart icon"></i> 喜欢 </a>
+                        <div id="likes" class="circular ui basic left pointing label" th:classappend="${userLike} ? 'red'" th:text="${blog.likes}"></div>
+                    </div>
                     <button id="payButton" class="ui orange basic circular button">赞赏</button>
                 </div>
                 <div class="ui payQR flowing popup transition hidden">
                     <div class="ui orange basic label">
+                        <h4>你的赏识是我前进的动力</h4>
                         <div class="ui images" style="font-size: inherit !important;">
                             <div class="image">
-                                <img th:src="@{/images/wechat.jpg}" alt="" class="ui rounded bordered image" style="width: 120px">
+                                <img th:src="@{/images/zfbpay.jpg}" alt="" class="ui rounded bordered image" style="width: 120px">
                                 <div>支付宝</div>
                             </div>
                             <div class="image">
-                                <img th:src="@{/images/wechat.jpg}" alt="" class="ui rounded bordered image" style="width: 120px">
+                                <img th:src="@{/images/weixinpay.jpg}" alt="" class="ui rounded bordered image" style="width: 120px">
                                 <div>微信</div>
                             </div>
                         </div>
@@ -149,20 +155,28 @@
             <div id="comment-form" class="ui form">
                 <input type="hidden" id="blogId" name="blogId" th:value="${blog.id}">
                 <input type="hidden" id="parentCommentId" name="parentCommentId" value="-1">
-                <div class="field">
+                <!-- 未登陆 -->
+                <div class="field" sec:authorize="!isAuthenticated()">
+                    <div>
+                        <span>登陆后才可以发表评论呦</span>
+                        <a th:href="@{/toLogin}" class="ui red basic button m-padded-small">去登录</a>
+                    </div>
+                </div>
+                <!-- 登陆后显示 -->
+                <div class="field" sec:authorize="isAuthenticated()">
                     <textarea id="commentInfo" name="content" placeholder="请输入评论信息..."></textarea>
                 </div>
-                <div class="fields">
+                <div class="fields" sec:authorize="isAuthenticated()">
                     <div class="field m-mobile-wide m-margin-bottom-small">
                         <div class="ui left icon input">
                             <i class="user icon"></i>
-                            <input type="text" id="nickname" name="nickname" placeholder="姓名" th:value="${session.user}!=null ? ${session.user.nickname}">
+                            <input type="text" id="nickname" name="nickname" placeholder="姓名" th:value="${user.nickname}">
                         </div>
                     </div>
                     <div class="field m-mobile-wide m-margin-bottom-small">
                         <div class="ui left icon input">
                             <i class="mail icon"></i>
-                            <input type="text" id="email" name="email" placeholder="邮箱" th:value="${session.user}!=null ? ${session.user.email}">
+                            <input type="text" id="email" name="email" placeholder="邮箱" th:value="${user.email}">
                         </div>
                     </div>
                     <div class="field  m-margin-bottom-small m-mobile-wide">
@@ -198,6 +212,36 @@
 <th:block th:replace="commons/fragments :: script"></th:block>
 
 <script th:inline="javascript">
+    // 初始化layer
+    var layer;
+    layui.use('layer', function(){
+        layer = layui.layer;
+    });
+
+    // 点击喜欢
+    $(document).on("click", "#like-btn", function () {
+        var blogId = $("#blogId").val();
+        $.ajax({
+            url: "/blogLike",
+            data: { blogId : blogId },
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+                if (result.code === 100) {
+                    // 提示去登陆或直接跳转至登陆页面
+                    layer.msg(result.message);
+                } else if (result.code === 202) {
+                    // 已经点赞则什么都不操作
+                    layer.msg(result.message);
+                } else if (result.code === 203) {
+                    // 设置点赞数和变红
+                    $("#likes").text(result.data).addClass("red");
+                    $("#like-btn").addClass("red");
+                }
+            }
+        });
+    });
+
     // 赞赏按钮
     $('#payButton').popup({
         popup: $('.payQR.popup'),
@@ -229,7 +273,6 @@
     var url = /*[[@{/blog/{id}(id=${blog.id})}]]*/"";
     qrcode = new QRCode("qrcode", {
         // 扫码后获取的文章内容
-        // text: "http://jindo.dev.naver.com/collie",
         text: serurl + url, // 对应文章的浏览地址，扫码后可在手机端查看
         width: 110,
         height: 110,
@@ -282,34 +325,7 @@
         }
     });
 
-    // 评论表单验证
-    $('.ui.form').form({
-        fields: {
-            title: {
-                identifier: 'content',
-                rules: [{
-                    type: 'empty',
-                    prompt: '请输入评论内容'
-                }
-                ]
-            },
-            content: {
-                identifier: 'nickname',
-                rules: [{
-                    type: 'empty',
-                    prompt: '请输入你的大名'
-                }]
-            },
-            type: {
-                identifier: 'email',
-                rules: [{
-                    type: 'email',
-                    prompt: '请填写正确的邮箱地址'
-                }]
-            }
-        }
-    });
-
+    // 提交评论
     function postData() {
         $.ajax({
             url: "/comments",
@@ -349,6 +365,34 @@
         // 设置评论id
         $("#parentCommentId").val(commentId);
     }
+
+    // 评论表单验证
+    $('.ui.form').form({
+        fields: {
+            title: {
+                identifier: 'content',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入评论内容'
+                }
+                ]
+            },
+            content: {
+                identifier: 'nickname',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入你的大名'
+                }]
+            },
+            type: {
+                identifier: 'email',
+                rules: [{
+                    type: 'email',
+                    prompt: '请填写正确的邮箱地址'
+                }]
+            }
+        }
+    });
 </script>
 </body>
 </html>

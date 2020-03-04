@@ -8,6 +8,12 @@ import com.huidu.huidublog.entity.User;
  * @Description: 用户service
  */
 public interface UserService {
-    // 登陆方法
-    User login(String username, String password);
+    // 管理员登陆
+    User findUserByLogin(String username, String password);
+
+    // 查询用户名是否存在
+    User findByUsername(String username);
+
+    // 保存用户信息
+    void saveUser(User user);
 }

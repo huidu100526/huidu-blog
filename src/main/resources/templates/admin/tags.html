@@ -24,7 +24,7 @@
         <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
             <i id="closeIcon" class="close icon"></i>
             <div class="header">提示：</div>
-            <p th:text="${message}">恭喜，操作成功！</p>
+            <p th:text="${message}"></p>
         </div>
         <table class="ui compect teal table">
             <thead>
@@ -58,13 +58,13 @@
         </table>
     </div>
 </div>
-
 <br><br>
+
 <!-- 引入底部footer -->
-<footer th:replace="commons/fragments_admin :: footer"></footer>
+<footer th:replace="commons/fragments :: footer"></footer>
 
 <!-- 引入js -->
-<th:block th:replace="commons/fragments_admin :: script"></th:block>
+<th:block th:replace="commons/fragments :: script"></th:block>
 
 <script>
     // 消息提示关闭

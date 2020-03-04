@@ -33,16 +33,30 @@ public class ResultVO {
     }
 
     /**
-     * 返回成功，传入信息和数据
+     * 返回成功，无数据
      */
-    public static ResultVO success(String message, Object data) {
-        return new ResultVO(200, message, data);
+    public static ResultVO success(Integer code, String message) {
+        return new ResultVO(code, message, null);
     }
 
     /**
-     * 返回失败，传入信息和数据
+     * 返回失败, 无数据
      */
-    public static ResultVO fial(String message, Object data) {
-        return new ResultVO(100, message, data);
+    public static ResultVO fial(Integer code, String message) {
+        return new ResultVO(code, message, null);
+    }
+
+    /**
+     * 返回成功
+     */
+    public static ResultVO success(Integer code, String message, Object data) {
+        return new ResultVO(code, message, data);
+    }
+
+    /**
+     * 返回失败
+     */
+    public static ResultVO fial(Integer code, String message, Object data) {
+        return new ResultVO(code, message, data);
     }
 }

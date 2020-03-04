@@ -12,15 +12,23 @@ spring:
   # 数据库连接设置
   datasource:
     url: jdbc:mysql://localhost:3306/huidu_blog?serverTimezone=UTC&characterEncoding=utf-8
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
   jpa:
     show-sql: false
     # 设置为当实体类改变则相应更新数据库表
-    hibernate:
-      ddl-auto: update
+#    hibernate:
+#      ddl-auto: update
+  data:
+    elasticsearch:
+      cluster-name: elasticsearch
+      cluster-nodes: 127.0.0.1:9300
+  # 连接redis
+#  redis:
+#    host: 192.168.1.128
+#    port: 6379
 
 logging:
   # 日志打印级别
@@ -30,4 +38,5 @@ logging:
   # 生成日志的位置，更目录下的log文件中生成
   file: log/blog.log
 
+# 评论人默认头像
 comment.avatar: /images/avatar.png

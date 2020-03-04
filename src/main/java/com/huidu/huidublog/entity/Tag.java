@@ -1,6 +1,5 @@
 package com.huidu.huidublog.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -27,8 +26,7 @@ public class Tag {
     @NotEmpty(message = "标签名称不能为空")
     private String name;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.EAGER)
     private List<Blog> blogs = new ArrayList<>();
 
     public Tag() {

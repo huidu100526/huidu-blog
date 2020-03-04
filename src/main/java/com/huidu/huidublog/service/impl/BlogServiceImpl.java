@@ -37,6 +37,7 @@ public class BlogServiceImpl implements BlogService {
         return blogRepository.getOne(id);
     }
 
+    @Transactional
     @Override
     public Blog getBlobAndConvert(Long id) {
         // 获取blog
@@ -103,8 +104,9 @@ public class BlogServiceImpl implements BlogService {
         // 没有id值则是新增
         blog.setCreateTime(new Date());
         blog.setUpdateTime(new Date());
-        // 默认初始阅读数为0
+        // 设置初始阅读数和喜欢数为0
         blog.setViews(0);
+        blog.setLikes(0);
         return blogRepository.save(blog);
     }
 
@@ -157,5 +159,20 @@ public class BlogServiceImpl implements BlogService {
         // 排序后取出前几个(size)
         Pageable pageable = PageRequest.of(0, size, sort);
         return blogRepository.findNewBlogTop(pageable);
+    }
+
+    @Transactional
+    @Override
+    public Integer addLikeByBlogId(Long blogId) {
+        blogRepository.updateLikes(blogId);
+        Blog blog = blogRepository.getOne(blogId);
+        // 返回喜欢数
+        return blog.getLikes();
+    }
+
+    @Transactional
+    @Override
+    public Integer lessLikeByBlogId(Long blogId) {
+        return null;
     }
 }
