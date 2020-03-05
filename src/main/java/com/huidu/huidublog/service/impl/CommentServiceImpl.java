@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public Comment saveComment(Comment comment, Long parentCommentId) {
+    public void saveComment(Comment comment, Long parentCommentId) {
         // 如果不等于-1，则为回复
         if (parentCommentId != -1) {
             comment.setParentComment(commentRepository.getOne(parentCommentId));
@@ -41,7 +41,7 @@ public class CommentServiceImpl implements CommentService {
             comment.setParentComment(null);
         }
         comment.setCreateTime(new Date());
-        return commentRepository.save(comment);
+        commentRepository.save(comment);
     }
 
 

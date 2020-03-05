@@ -14,5 +14,5 @@ public interface CommentService {
     List<Comment> listCommentByBlogId(Long blogId);
 
     // 保存评论
-    Comment saveComment(Comment comment, Long parentCommentId);
+    void saveComment(Comment comment, Long parentCommentId);
 }

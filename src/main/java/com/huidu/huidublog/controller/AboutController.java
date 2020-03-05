@@ -1,7 +1,6 @@
 package com.huidu.huidublog.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * @auther huidu
@@ -10,11 +9,4 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class AboutController {
-    /**
-     * 跳转至关于我页面
-     */
-    @GetMapping("/about")
-    public String about() {
-        return "about";
-    }
 }

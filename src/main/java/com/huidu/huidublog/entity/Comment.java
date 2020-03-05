@@ -26,11 +26,6 @@ public class Comment {
     private String nickname;
 
     /**
-     * 邮箱
-     */
-    private String email;
-
-    /**
      * 评论内容
      */
     private String content;
@@ -71,7 +66,6 @@ public class Comment {
         return "Comment{" +
                 "id=" + id +
                 ", nickname='" + nickname + '\'' +
-                ", email='" + email + '\'' +
                 ", content='" + content + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", createTime=" + createTime +

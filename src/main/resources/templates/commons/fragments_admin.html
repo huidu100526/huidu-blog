@@ -34,8 +34,8 @@
             <a href="#" th:href="@{/admin/roles}" class="m-item item m-mobile-hide" th:classappend="${n==4} ? 'active'">
                 <i class="mini user icon"></i>角色
             </a>
-            <div class="fadeInLeft m-item m-mobile-hide menu">
-                <div class="ui simple dropdown item">
+            <div class="right m-item m-mobile-hide menu">
+                <div class="ui dropdown item">
                     <div class="text">
                         <span sec:authentication="name"></span>
                     </div>

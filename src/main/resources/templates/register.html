@@ -118,12 +118,12 @@
             },
             success: function (result) {
                 console.log(result);
-                if (result.code === 101) {
-                    // 成功后跳转至欢迎页
+                if (result.code === 100) {
+                    // 注册成功提示可以去登陆
                     layer.msg(result.message, {time: 2500, icon: 1, shift: 5}, function () {});
-                    // 情况表单内容
+                    // 清空表单内容
                     $("#registerForm")[0].reset();
-                } else if (result.code === 204) {
+                } else if (result.code === 101) {
                     layer.msg(result.message, {time: 1500, icon: 2, shift: 5}, function () {});
                 }
             }

@@ -1,6 +1,7 @@
 package com.huidu.huidublog.controller;
 
 import com.huidu.huidublog.VO.ResultVO;
+import com.huidu.huidublog.annotation.PermissionCheck;
 import com.huidu.huidublog.entity.User;
 import com.huidu.huidublog.enums.ResultEnum;
 import com.huidu.huidublog.service.BlogService;
@@ -36,6 +37,7 @@ public class BlogLikeController {
      */
     @GetMapping("/blogLike")
     @ResponseBody
+    @PermissionCheck(value = "ROLE_USER")
     public ResultVO blogLike(@AuthenticationPrincipal Principal principal, @RequestParam Long blogId) {
         // 需要用户先登陆才能操作
         if (principal == null) {

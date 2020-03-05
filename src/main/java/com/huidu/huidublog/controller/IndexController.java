@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.List;
 
@@ -46,8 +48,12 @@ public class IndexController {
     /**
      * 至博客首页
      */
-    @GetMapping({"/", "index"})
-    public String index(@PageableDefault(size = 6, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable, Model model) {
+    @GetMapping({"/", "/index"})
+    public String index(@PageableDefault(size = 6, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
+                        HttpServletRequest request, HttpServletResponse response, Model model) {
+        // 判断是否有需要回跳的url，有则将需要回跳的url保存在响应头中
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("lastUrl", (String) request.getSession().getAttribute("lastUrl"));
         // 分页查询所有博客
         Page<Blog> listBlog = blogService.getListBlog(pageable);
         // 获取使用最多的前6个分类
