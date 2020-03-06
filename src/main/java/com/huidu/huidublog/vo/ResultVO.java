@@ -1,4 +1,4 @@
-package com.huidu.huidublog.VO;
+package com.huidu.huidublog.vo;
 
 import lombok.Data;
 
@@ -22,9 +22,6 @@ public class ResultVO {
     private String message;
 
     private Object data;
-
-    public ResultVO() {
-    }
 
     private ResultVO(Integer code, String message, Object data) {
         this.code = code;

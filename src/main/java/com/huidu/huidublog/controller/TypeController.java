@@ -1,6 +1,6 @@
 package com.huidu.huidublog.controller;
 
-import com.huidu.huidublog.VO.BlogQuery;
+import com.huidu.huidublog.vo.BlogQuery;
 import com.huidu.huidublog.entity.Blog;
 import com.huidu.huidublog.entity.Type;
 import com.huidu.huidublog.service.BlogService;

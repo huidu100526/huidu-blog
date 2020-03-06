@@ -1,6 +1,6 @@
 package com.huidu.huidublog.controller;
 
-import com.huidu.huidublog.VO.ResultVO;
+import com.huidu.huidublog.vo.ResultVO;
 import com.huidu.huidublog.entity.User;
 import com.huidu.huidublog.enums.ResultEnum;
 import com.huidu.huidublog.service.UserService;

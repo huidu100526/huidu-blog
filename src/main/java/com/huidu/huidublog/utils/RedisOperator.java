@@ -17,7 +17,6 @@ public class RedisOperator {
 	private StringRedisTemplate redisTemplate;
 	
 	// ==================== Key（键），简单的key-value操作====================
-
 	/**
 	 * 实现命令：TTL key，以秒为单位，返回给定 key的剩余生存时间(TTL, time to live)。
 	 */
@@ -54,7 +53,6 @@ public class RedisOperator {
 	}
 
 	// ==================== String（字符串）====================
-
 	/**
 	 * 实现命令：SET key value，设置一个key-value（将字符串值 value关联到 key）
 	 */
@@ -77,7 +75,6 @@ public class RedisOperator {
 	}
 
 	// ==================== Hash（哈希表）====================
-
 	/**
 	 * 实现命令：HSET key field value，将哈希表 key中的域 field的值设为 value
 	 */
@@ -107,7 +104,6 @@ public class RedisOperator {
 	}
 
 	// ==================== List（列表）====================
-
 	/**
 	 * 实现命令：LPUSH key value，将一个值 value插入到列表 key的表头
 	 */

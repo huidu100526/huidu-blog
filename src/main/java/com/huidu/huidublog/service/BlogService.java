@@ -1,6 +1,6 @@
 package com.huidu.huidublog.service;
 
-import com.huidu.huidublog.VO.BlogQuery;
+import com.huidu.huidublog.vo.BlogQuery;
 import com.huidu.huidublog.entity.Blog;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

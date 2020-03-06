@@ -1,6 +1,6 @@
 package com.huidu.huidublog.aspect;
 
-import com.huidu.huidublog.VO.ResultVO;
+import com.huidu.huidublog.vo.ResultVO;
 import com.huidu.huidublog.annotation.PermissionCheck;
 import com.huidu.huidublog.enums.ResultEnum;
 import lombok.extern.slf4j.Slf4j;
