@@ -12,17 +12,21 @@
                         </div>
                         <div class="field">
                             <label>昵称</label>
-                            <input style="width: 30%" type="text" id="nickname" name="nickname" placeholder="昵称">
+                            <input style="width: 30%" type="text" id="nickname" placeholder="昵称">
                         </div>
                         <div class="field">
                             <label>用户名</label>
-                            <input style="width: 30%" type="text" readonly="" id="username" name="username" placeholder="用户名">
+                            <input style="width: 30%" type="text" readonly="" id="username" placeholder="用户名">
                         </div>
                         <div class="field">
                             <label>邮箱</label>
-                            <input style="width: 30%" type="text" id="email" name="email" placeholder="填写你的邮箱">
+                            <input style="width: 30%" type="text" id="email" placeholder="填写你的邮箱">
                         </div>
-                        <a class="circular ui orange button" onclick="saveUserInfo()" type="submit">保存</a>
+                        <div class="field">
+                            <label>个人简介</label>
+                            <textarea style="width: 50%" id="userProfile" name="userProfile" placeholder="填写你的个人简介"></textarea>
+                        </div>
+                        <a class="circular ui orange button" onclick="updateUserInfo()" type="submit">保存</a>
                     </form>
                 </div>
             </div>
@@ -42,10 +46,16 @@
             url: "/loadUserInfo",
             success: function (result) {
                 console.log(result);
-                $("#avatarImage").attr("src", result.data.avatar);
-                $("#nickname").val(result.data.nickname);
-                $("#username").val(result.data.username);
-                $("#email").val(result.data.email);
+                if (result.code === 200) {
+                    $("#avatarImage").attr("src", result.data.avatar);
+                    $("#avatar").val(result.data.avatar);
+                    $("#nickname").val(result.data.nickname);
+                    $("#username").val(result.data.username);
+                    $("#email").val(result.data.email);
+                    $("#userProfile").val(result.data.userProfile);
+                } else {
+                    layer.msg(result.message, {time: 1500, icon: 2, shift: 5}, function () {});
+                }
             }
         });
     });
@@ -59,10 +69,12 @@
             field: "file",
             done: function (result) {
                 console.log(result);
-                if (result.code === 200) {
+                if (result.code === 402) {
                     // 头像赋值并预览
                     $("#avatar").val(result.data);
                     $("#avatarImage").attr("src", result.data);
+                    // 提示上传成功
+                    layer.msg(result.message, {time: 1500, icon: 2, shift: 5}, function () {});
                 } else {
                     layer.msg(result.message, {time: 1500, icon: 2, shift: 5}, function () {});
                 }
@@ -75,8 +87,12 @@
     });
 
     // 跟新用户信息
-    function saveUserInfo() {
+    function updateUserInfo() {
+        // 头像
+        var avatar = $("#avatar").val();
         var nickname = $("#nickname").val();
+        var email = $("#email").val();
+        var userProfile = $("#userProfile").val();
         if (nickname.trim() === "") {
             layer.msg("昵称不能为空", {time: 1500, icon: 2, shift: 5}, function () {});
             return;
@@ -84,33 +100,22 @@
             layer.msg("昵称长度3~10位", {time: 1500, icon: 2, shift: 5}, function () {});
             return;
         }
-        var email = $("#email").val();
-        var checkemail = /^([a-z0-9_.-]+)@([\da-z.-]+)\.([a-z.]{2,6})$/;
-        if (email.trim() === "") {
-            layer.msg("邮箱不能为空", {time: 1500, icon: 2, shift: 5}, function () {});
-            return;
-        }
-        if (!checkemail.test(email)) {
-            layer.msg("请填写正确的邮箱", {time: 1500, icon: 2, shift: 5}, function () {});
-            return;
-        }
-        // 头像
-        var avatar = $("#avatar").val();
         $.ajax({
             url: "/updateUserInfo",
             type: "POST",
             data: {
+                "avatar": avatar,
                 "nickname": nickname,
                 "email": email,
-                "avatar": avatar
+                "userProfile": userProfile
             },
             success: function (result) {
                 console.log(result);
-                if (result.code === 200) {
-                    // 操作成功
+                if (result.code === 201) {
+                    // 跟新用户信息成功
                     layer.msg(result.message, {time: 2500, icon: 1, shift: 5}, function () {});
                 } else {
-                    layer.msg("保存失败", {time: 1500, icon: 2, shift: 5}, function () {});
+                    layer.msg(result.message, {time: 1500, icon: 2, shift: 5}, function () {});
                 }
             }
         })

@@ -1,6 +1,7 @@
 package com.huidu.huidublog.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
  * @Description: 文章点赞记录
  */
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "user_like_blog")
 public class UserLikeBlog {
@@ -28,4 +30,13 @@ public class UserLikeBlog {
      */
     @Column(name = "blog_id")
     private Long blogId;
+
+    @Override
+    public String toString() {
+        return "UserLikeBlog{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", blogId=" + blogId +
+                '}';
+    }
 }

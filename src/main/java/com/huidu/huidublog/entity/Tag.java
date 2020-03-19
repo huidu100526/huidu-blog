@@ -36,7 +36,6 @@ public class Tag {
         return "Tag{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", blogs=" + blogs +
                 '}';
     }
 }

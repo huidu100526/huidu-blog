@@ -96,9 +96,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests() // 请求授权
                 .antMatchers("/", "/index", "/types", "/tags", "/archives", "/aboutme").permitAll() // 所有人都可访问
-                .antMatchers("/admin/**").hasRole(UserRoleEnum.ROLE_ADMIN.getName()) // 管理员
+                // 普通用户登陆后才能访问的路径
+                .antMatchers("/userCenter", "/userData").hasRole(UserRoleEnum.ROLE_USER.getName())
+                // 管理员登陆后才能访问的路径
+                .antMatchers("/admin/**").hasRole(UserRoleEnum.ROLE_ADMIN.getName())
                 // 未认证默认到登陆页面
-                .and().formLogin().loginPage("/toLogin").loginProcessingUrl("/login").defaultSuccessUrl("/")
+                .and().formLogin().loginPage("/login").defaultSuccessUrl("/")
                 // 注销后回到首页
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/");
         // 关闭csrf验证

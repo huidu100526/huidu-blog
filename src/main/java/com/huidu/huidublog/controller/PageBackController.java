@@ -49,4 +49,12 @@ public class PageBackController {
     public String toUserData() {
         return "user/userData";
     }
+
+    /**
+     * 跳转至安全设置页面
+     */
+    @GetMapping("/userSafety")
+    public String userSafety() {
+        return "user/userSafety";
+    }
 }

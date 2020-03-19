@@ -56,7 +56,7 @@ public class CommentController {
         // 根据此博客id查询博客进行保存至评论信息中
         Blog blog = blogService.getBlog(blogId);
         comment.setBlog(blog);
-        comment.setAvatar(user.getAvatar());
+        comment.setUser(user);
         if (user.getType() == 1) { // 是管理员才设置为true
             comment.setAdminComment(true);
         }

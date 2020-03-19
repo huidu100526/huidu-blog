@@ -23,19 +23,9 @@ public class Comment {
     private Long id;
 
     /**
-     * 昵称
-     */
-    private String nickname;
-
-    /**
      * 评论内容
      */
     private String content;
-
-    /**
-     * 头像
-     */
-    private String avatar;
 
     /**
      * 评论时间
@@ -46,8 +36,8 @@ public class Comment {
     @ManyToOne
     private Blog blog;
 
-//    @ManyToOne
-//    private User user;
+    @ManyToOne
+    private User user;
 
     /**
      * 自关联
@@ -67,13 +57,8 @@ public class Comment {
     public String toString() {
         return "Comment{" +
                 "id=" + id +
-                ", nickname='" + nickname + '\'' +
                 ", content='" + content + '\'' +
-                ", avatar='" + avatar + '\'' +
                 ", createTime=" + createTime +
-                ", blog=" + blog +
-//                ", user=" + user +
-                ", replyComments=" + replyComments +
                 ", parentComment=" + parentComment +
                 ", adminComment=" + adminComment +
                 '}';

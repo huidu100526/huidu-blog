@@ -175,6 +175,7 @@
             done: function (result) {
                 console.log(result);
                 if (result.code === 200) {
+                    // 将首图地址进行赋值
                     $("#firstPicture").val(result.data);
                 } else {
                     layer.msg(result.message, {time: 1500, icon: 2, shift: 5}, function () {});
@@ -194,7 +195,7 @@
             done: function (result) {
                 console.log(result);
                 if (result.code === 200) {
-                    // 生成图片链接
+                    // 生成图片链接进行赋值
                     $("#bolgImage").val("![](" + result.data + ")");
                 } else {
                     layer.msg(result.message, {time: 1500, icon: 2, shift: 5}, function () {});

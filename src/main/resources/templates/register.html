@@ -37,12 +37,6 @@
                                 <input type="password" id="password" name="password" placeholder="密码"/>
                             </div>
                         </div>
-                        <div class="field">
-                            <div class="ui left icon input">
-                                <i class="envelope icon"></i>
-                                <input type="text" id="email" name="email" placeholder="邮箱"/>
-                            </div>
-                        </div>
                         <a onclick="doRegister()" class="ui fluid large teal button">注 册</a>
                     </div>
                 </form>
@@ -94,17 +88,7 @@
         }
         var password = $("#password").val();
         if (password.trim() === "") {
-            layer.msg("用户名不能为空", {time: 1500, icon: 2, shift: 5}, function () {});
-            return;
-        }
-        var email = $("#email").val();
-        var checkemail = /^([a-z0-9_.-]+)@([\da-z.-]+)\.([a-z.]{2,6})$/;
-        if (email.trim() === "") {
-            layer.msg("邮箱不能为空", {time: 1500, icon: 2, shift: 5}, function () {});
-            return;
-        }
-        if (!checkemail.test(email)) {
-            layer.msg("请填写正确的邮箱", {time: 1500, icon: 2, shift: 5}, function () {});
+            layer.msg("密码不能为空", {time: 1500, icon: 2, shift: 5}, function () {});
             return;
         }
         $.ajax({
@@ -113,8 +97,7 @@
             data: {
                 "nickname": nickname,
                 "username": username,
-                "password": password,
-                "email": email
+                "password": password
             },
             success: function (result) {
                 console.log(result);

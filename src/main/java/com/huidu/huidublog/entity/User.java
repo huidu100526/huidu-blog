@@ -52,6 +52,11 @@ public class User {
     private String avatar;
 
     /**
+     * 个人简介
+     */
+    private String userProfile;
+
+    /**
      * 用户类型
      */
     private Integer type = UserTypeEnum.USER.getCode();
@@ -79,9 +84,9 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Blog> blogs = new ArrayList<>();
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "user")
-//    private List<Comment> comments = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments = new ArrayList<>();
 
     @Override
     public String toString() {
@@ -92,12 +97,10 @@ public class User {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", userProfile='" + userProfile + '\'' +
                 ", type=" + type +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
-                ", roles=" + roles +
-                ", blogs=" + blogs +
-//                ", comments=" + comments +
                 '}';
     }
 }

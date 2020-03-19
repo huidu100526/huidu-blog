@@ -11,7 +11,7 @@
 <nav th:replace="commons/fragments :: menu(1)"></nav>
 
 <!--中间内容-->
-<div id="waypoint" class="m-container-small m-padded-tb-big animated fadeInUp">
+<div id="waypoint" class="m-container-small m-padded-tb-big animated">
     <div class="ui container">
         <div class="ui top attached segment">
             <div class="ui horizontal link list">
@@ -103,12 +103,12 @@
                         <div class="comment" th:each="comment : ${comments}">
                             <!-- 头像 -->
                             <a class="avatar">
-                                <img th:src="@{${comment.avatar}}">
+                                <img th:src="@{${comment.user.avatar}}">
                             </a>
                             <div class="content">
                                 <!-- 评论人 -->
                                 <a class="author">
-                                    <span th:text="${comment.nickname}"></span>
+                                    <span th:text="${comment.user.nickname}"></span>
                                     <div class="ui mini basic teal left pointing label m-padded-mini" th:if="${comment.adminComment}">博主</div>
                                 </a>
                                 <!-- 评论时间 -->
@@ -117,8 +117,8 @@
                                 </div>
                                 <!-- 评论内容 -->
                                 <div class="text" th:text="${comment.content}"></div>
-                                <div class="actions">
-                                    <a class="reply" data-commentid="1" data-commentnickname="Matt" th:attr="data-commentid=${comment.id},data-commentnickname=${comment.nickname}" onclick="reply(this)">回复</a>
+                                <div class="actions" sec:authorize="isAuthenticated()">
+                                    <a class="reply" data-commentid="1" data-commentnickname="Matt" th:attr="data-commentid=${comment.id},data-commentnickname=${comment.user.nickname}" onclick="reply(this)">回复</a>
                                 </div>
                             </div>
                             <!-- 回复评论区 -->
@@ -126,14 +126,14 @@
                                 <div class="comment" th:each="reply : ${comment.replyComments}">
                                     <!-- 头像 -->
                                     <a class="avatar">
-                                        <img th:src="@{${reply.avatar}}">
+                                        <img th:src="@{${reply.user.avatar}}">
                                     </a>
                                     <div class="content">
                                         <!-- 回复评论人 -->
                                         <a class="author" >
-                                            <span th:text="${reply.nickname}"></span>
+                                            <span th:text="${reply.user.nickname}"></span>
                                             <div class="ui mini basic teal left pointing label m-padded-mini" th:if="${reply.adminComment}">博主</div>
-                                            &nbsp;<span th:text="|@ ${reply.parentComment.nickname}|" class="m-teal"></span>
+                                            &nbsp;<span th:text="|@ ${reply.parentComment.user.nickname}|" class="m-teal"></span>
                                         </a>
                                         <!-- 回复评论时间 -->
                                         <div class="metadata">
@@ -141,8 +141,8 @@
                                         </div>
                                         <!-- 回复评论内容 -->
                                         <div class="text" th:text="${reply.content}"></div>
-                                        <div class="actions">
-                                            <a class="reply" data-commentid="1" data-commentnickname="Matt" th:attr="data-commentid=${reply.id},data-commentnickname=${reply.nickname}" onclick="reply(this)">回复</a>
+                                        <div class="actions" sec:authorize="isAuthenticated()">
+                                            <a class="reply" data-commentid="1" data-commentnickname="Matt" th:attr="data-commentid=${reply.id},data-commentnickname=${reply.user.nickname}" onclick="reply(this)">回复</a>
                                         </div>
                                     </div>
                                 </div>
@@ -159,7 +159,7 @@
                 <div class="field" sec:authorize="!isAuthenticated()">
                     <div>
                         <span>登陆后才可以发表评论呦</span>
-                        <a th:href="@{/toLogin}" class="ui red basic button m-padded-small">去登录</a>
+                        <a th:href="@{/login}" class="ui red basic button m-padded-small">去登录</a>
                     </div>
                 </div>
                 <!-- 登陆后显示 -->
@@ -167,11 +167,6 @@
                     <textarea id="commentInfo" name="content" placeholder="请输入评论信息..."></textarea>
                 </div>
                 <div class="fields" sec:authorize="isAuthenticated()">
-                    <div class="field m-mobile-wide m-margin-bottom-small">
-                        <div class="ui left icon input">
-                            <input type="hidden" readonly="readonly" id="nickname" name="nickname" th:value="${user.nickname}">
-                        </div>
-                    </div>
                     <div class="field  m-margin-bottom-small m-mobile-wide">
                         <button id="comment-btn" type="button" class="ui teal button m-mobile-wide"><i class="edit icon"></i> 提交评论 </button>
                     </div>
@@ -236,20 +231,6 @@
         $(window).scrollTo(0, 600);
     });
 
-    // 初始化二维码生成插件
-    var qrcode;
-    var serurl = "127.0.0.1:8080";
-    var url = /*[[@{/blog/{id}(id=${blog.id})}]]*/"";
-    qrcode = new QRCode("qrcode", {
-        // 扫码后获取的文章内容
-        text: serurl + url, // 对应文章的浏览地址，扫码后可在手机端查看
-        width: 110,
-        height: 110,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-    });
-
     // 初始化滚动侦测插件（在顶部隐藏）
     var waypoint;
     waypoint = new Waypoint({
@@ -274,6 +255,20 @@
         contentSelector: '.js-toc-content',
         // 生成目录的标题级别
         headingSelector: 'h1, h2, h3'
+    });
+
+    // 初始化二维码生成插件
+    var qrcode;
+    var serurl = "127.0.0.1:8080";
+    var url = /*[[@{/blog/{id}(id=${blog.id})}]]*/"";
+    qrcode = new QRCode("qrcode", {
+        // 扫码后获取的文章内容
+        text: serurl + url, // 对应文章的浏览地址，扫码后可在手机端查看
+        width: 110,
+        height: 110,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
     });
 
     // 点击喜欢
@@ -327,7 +322,6 @@
             data: {
                 parentCommentId: $("#parentCommentId").val(),
                 blogId: $("#blogId").val(),
-                nickname: $("#nickname").val(),
                 content: $("#commentInfo").val()
             },
             success: function (result) {

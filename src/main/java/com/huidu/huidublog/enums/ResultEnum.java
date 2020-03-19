@@ -9,28 +9,28 @@ import lombok.Getter;
  */
 @Getter
 public enum ResultEnum {
-    /**
-     * 100：登陆注册校验相关
-     * 200：成功
-     * 300：点赞相关
-     */
-
+    // 注册相关
     SUCCESS_REGISTER(100, "注册成功，可以去登陆啦~"),
     USER_REPEAT(101, "该用户名已存在"),
 
-    USER_NOT_LOGIN(102, "请先登陆才能操作噢"),
+    // 相应功能校验相关
+    USER_NOT_LOGIN(102, "要先登陆才能操作噢"),
     USER_NOT_AUTHORITY(103, "用户权限不足"),
+    FIAL_EMAIL_CHECK(105, "请填写正确格式的邮箱"),
 
-    USER_NULL(104, "用户不存在，请先注册"),
-    FIAL_LOGIN(105, "用户名或密码错误！"),
-
+    // 所有成功相关
     SUCCESS(200, "操作成功"),
+    SUCCESS_UPDATE_USERINFO(201, "更新成功"),
+    SUCCESS_UPDATE_PASSWORD(202, "密码修改成功，请重新登陆"),
 
+    // 点赞相关
     BLOG_HAS_LIKE(300, "已经点赞过啦~"),
     SUCCESS_LIKE_BLOG(301, "点赞成功"),
 
+    // 图片上传相关
     FILE_IS_NULL(400, "请重新选择图片"),
-    FILE_UPLOAD_FIAL(401, "上传图片失败")
+    FIAL_FILE_UPLOAD(401, "上传图片失败"),
+    SUCCESS_FILE_UPLOAD(402, "头像上传成功")
 
     ;
 

@@ -40,8 +40,8 @@ public class BlogExceptionHandler {
         // 返回错误信息
         if (ResultEnum.FILE_IS_NULL.getMessage().equals(e.getMessage())) {
             return ResultVO.fial(ResultEnum.FILE_IS_NULL.getCode(), e.getMessage());
-        } else if (ResultEnum.FILE_UPLOAD_FIAL.getMessage().equals(e.getMessage())) {
-            return ResultVO.fial(ResultEnum.FILE_UPLOAD_FIAL.getCode(), e.getMessage());
+        } else if (ResultEnum.FIAL_FILE_UPLOAD.getMessage().equals(e.getMessage())) {
+            return ResultVO.fial(ResultEnum.FIAL_FILE_UPLOAD.getCode(), e.getMessage());
         } else {
             return null;
         }

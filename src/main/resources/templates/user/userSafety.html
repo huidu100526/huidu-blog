@@ -1,0 +1,68 @@
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">修改我的密码</div>
+                <div class="layui-card-body" pad15>
+                    <form id="passwordForm" class="ui form">
+                        <div class="field">
+                            <label>新密码</label>
+                            <input style="width: 30%" type="password" id="password" placeholder="填写你的密码">
+                        </div>
+                        <div class="field">
+                            <label>确认新密码</label>
+                            <input style="width: 30%" type="password" id="surePassword" placeholder="再次填写你的密码">
+                        </div>
+                        <a class="circular ui orange button" onclick="updatePassword()" type="submit">保存</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // 初始化layer
+    var layer;
+    layui.use('layer', function(){
+        layer = layui.layer;
+    });
+
+    // 修改密码
+    function updatePassword() {
+        var password = $("#password").val();
+        if (password.trim() === "") {
+            layer.msg("新密码不能为空", {time: 1500, icon: 2, shift: 5}, function () {});
+            return;
+        }
+        var surePassword = $("#surePassword").val();
+        if (surePassword.trim() === "") {
+            layer.msg("确认密码不能为空", {time: 1500, icon: 2, shift: 5}, function () {});
+            return;
+        }
+        if (password !== surePassword) {
+            layer.msg("两次输入密码不一致", {time: 1500, icon: 2, shift: 5}, function () {});
+        } else {
+            $.ajax({
+                url: "/updatePassword",
+                type: "POST",
+                data: {
+                    "newPassword": password
+                },
+                success: function (result) {
+                    console.log(result);
+                    if (result.code === 202) {
+                        // 操作成功，跳转去重新登陆
+                        layer.msg(result.message, {time: 2500, icon: 1, shift: 5}, function () {});
+                        // 清空表单内容
+                        $("#passwordForm")[0].reset();
+                        setTimeout(function () {
+                            location.reload();
+                        },3000);
+                    } else {
+                        layer.msg(result.message, {time: 1500, icon: 2, shift: 5}, function () {});
+                    }
+                }
+            })
+        }
+    }
+</script>
