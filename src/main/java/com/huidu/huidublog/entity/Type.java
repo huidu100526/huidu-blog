@@ -1,6 +1,7 @@
 package com.huidu.huidublog.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -13,6 +14,7 @@ import java.util.List;
  * @Description: 分类实体
  */
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "type")
 public class Type {
@@ -29,14 +31,12 @@ public class Type {
     @OneToMany(mappedBy = "type", fetch = FetchType.EAGER)
     private List<Blog> blogs = new ArrayList<>();
 
-    public Type() {
-    }
-
     @Override
     public String toString() {
         return "Type{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", blogs=" + blogs +
                 '}';
     }
 }

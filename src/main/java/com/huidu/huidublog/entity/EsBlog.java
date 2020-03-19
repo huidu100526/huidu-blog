@@ -37,6 +37,9 @@ public class EsBlog {
     @Field(type = FieldType.Long)
     private Integer views;
 
+    @Field(type = FieldType.Long)
+    private Integer likes;
+
     @Field(type = FieldType.Boolean)
     private boolean appreciation;
 
@@ -56,4 +59,10 @@ public class EsBlog {
 
     @Field(type = FieldType.Date)
     private Date updateTime;
+
+    @Field(type = FieldType.Long)
+    private Long userId;
+
+    @Field(type = FieldType.Long)
+    private Long typeId;
 }

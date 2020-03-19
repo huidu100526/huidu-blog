@@ -40,10 +40,18 @@
                 </div>
             </div>
 
+            <!-- 文章图片地址生成 -->
+            <div class="required field">
+                <div class="ui left labeled input">
+                    <button type="button" class="layui-btn" id="uploadImage">选择图片</button>
+                    <input type="text" id="bolgImage" placeholder="生成图片地址">
+                </div>
+            </div>
+
             <!-- 文章编辑部分 -->
             <div class="required field">
                 <div id="md-content" style="z-index: 1 !important;">
-                    <textarea placeholder="博客内容" name="content" style="display: none" th:text="*{content}"></textarea>
+                    <textarea placeholder="博客内容" id="content" name="content" style="display: none" th:text="*{content}"></textarea>
                 </div>
             </div>
 
@@ -81,7 +89,8 @@
             <div class="required field">
                 <div class="ui left labeled input">
                     <label class="ui teal basic label">首图</label>
-                    <input type="text" name="firstPicture"  th:value="*{firstPicture}" placeholder="首图引用地址">
+                    <input type="text" id="firstPicture" name="firstPicture" th:value="*{firstPicture}" placeholder="首页图片地址">
+                    <button type="button" class="layui-btn" id="uploadFirstImage">上传首图</button>
                 </div>
             </div>
 
@@ -150,8 +159,52 @@
         });
     });
 
+    // 标签选择
     $('.ui.dropdown').dropdown({
         on: 'hover'
+    });
+
+    // 上传图片
+    layui.use('upload', function () {
+        var upload = layui.upload;
+        // 上传首图
+        var uploadFirst = upload.render({
+            elem: '#uploadFirstImage', //绑定元素
+            url: '/admin/blogs/upload', //上传接口
+            field: "file",
+            done: function (result) {
+                console.log(result);
+                if (result.code === 200) {
+                    $("#firstPicture").val(result.data);
+                } else {
+                    layer.msg(result.message, {time: 1500, icon: 2, shift: 5}, function () {});
+                }
+            },
+            error: function () {
+                //请求异常回调
+                layer.msg("上传失败，请重新上传", {time: 1500, icon: 2, shift: 5}, function () {});
+            }
+        });
+
+        // 选择图片生成地址
+        var uploadImage = upload.render({
+            elem: '#uploadImage', //绑定元素
+            url: '/admin/blogs/upload', //上传接口
+            field: "file",
+            done: function (result) {
+                console.log(result);
+                if (result.code === 200) {
+                    // 生成图片链接
+                    $("#bolgImage").val("![](" + result.data + ")");
+                } else {
+                    layer.msg(result.message, {time: 1500, icon: 2, shift: 5}, function () {});
+                }
+            },
+            error: function () {
+                //请求异常回调
+                layer.msg("上传失败，请重新上传", {time: 1500, icon: 2, shift: 5}, function () {});
+            }
+        });
     });
 
     // 保存

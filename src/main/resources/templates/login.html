@@ -31,11 +31,12 @@
                                 <input type="password" id="password" name="password" placeholder="密码"/>
                             </div>
                         </div>
+                        <span style="color: red" th:if="${param.error}" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}"></span>
                         <button class="ui fluid large teal button">登 录</button>
                     </div>
                 </form>
                 <br>
-                <a href="/toRegister">
+                <a href="/register">
                     <div class="ui floated animated button" tabindex="0" style="width: 30em !important;">
                         <div class="visible content">还没账号？</div>
                         <div class="hidden content">

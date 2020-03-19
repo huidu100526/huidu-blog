@@ -2,11 +2,6 @@ package com.huidu.huidublog.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * @auther huidu
@@ -15,12 +10,10 @@ import java.net.URL;
  */
 @Controller
 public class PageBackController {
-    private static final String SLASH_SYMBOL = "/";
-
     /**
      * 跳转至登陆页面
      */
-    @GetMapping("/toLogin")
+    @GetMapping("/login")
     public String toLogin() {
         return "login";
     }
@@ -28,7 +21,7 @@ public class PageBackController {
     /**
      * 跳转至注册页面
      */
-    @GetMapping("/toRegister")
+    @GetMapping("/register")
     public String toRegister() {
         return "register";
     }
@@ -37,28 +30,23 @@ public class PageBackController {
      * 跳转至关于我页面
      */
     @GetMapping("/aboutme")
-    public String aboutme(HttpServletRequest request) {
-        request.getSession().removeAttribute("lastUrl");
-        return "about";
+    public String aboutme() {
+        return "aboutme";
     }
 
     /**
-     * 登录前尝试保存上一个页面的url
+     * 跳转至用户信息页面
      */
-    @GetMapping("/toLoginByUrl")
-    @ResponseBody
-    public void toLogin(HttpServletRequest request) {
-        //保存跳转页面的url
-        String lastUrl = request.getHeader("Referer");
-        if (lastUrl != null) {
-            try {
-                URL url = new URL(lastUrl);
-                if (!SLASH_SYMBOL.equals(url.getPath())) {
-                    request.getSession().setAttribute("lastUrl", lastUrl);
-                }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
+    @GetMapping("/userCenter")
+    public String toUserInfo() {
+        return "userCenter";
+    }
+
+    /**
+     * 跳转至个人资料页面
+     */
+    @GetMapping("/userData")
+    public String toUserData() {
+        return "user/userData";
     }
 }

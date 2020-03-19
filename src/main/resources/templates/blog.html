@@ -196,8 +196,8 @@
 </div>
 <!-- 生成的二维码位置 -->
 <div id="qrcode" class="ui wechat-qr flowing popup transition hidden" style="width: 130px !important;"></div>
-
 <br><br>
+
 <!-- 引入底部footer -->
 <footer th:replace="commons/fragments :: footer"></footer>
 
@@ -205,52 +205,10 @@
 <th:block th:replace="commons/fragments :: script"></th:block>
 
 <script th:inline="javascript">
-    // $(function () {
-    //     $.ajax({
-    //         type: 'HEAD', // 获取头信息，type=HEAD即可
-    //         url: window.location.href,
-    //         async: false,
-    //         success: function (xhr) {
-    //             var lastUrl = xhr.getResponseHeader("lastUrl");
-    //             if (lastUrl != null) {
-    //                 window.location.replace(lastUrl);
-    //             }
-    //         }
-    //     });
-    // });
-
     // 初始化layer
     var layer;
     layui.use('layer', function(){
         layer = layui.layer;
-    });
-
-    // 点击喜欢
-    $(document).on("click", "#like-btn", function () {
-        var blogId = $("#blogId").val();
-        $.ajax({
-            url: "/blogLike",
-            data: { blogId : blogId },
-            dataType: "json",
-            success: function (result) {
-                console.log(result);
-                if (result.code === 102) {
-                    // 提示去登陆或直接跳转至登陆页面
-                    layer.msg(result.message);
-                    // 直接跳转登录页
-                    // $.get("/toLoginByUrl", function () {
-                    //     window.location.replace("/login");
-                    // });
-                } else if (result.code === 300) {
-                    // 已经点赞过了
-                    layer.msg(result.message);
-                } else if (result.code === 301) {
-                    // 设置点赞数和变红
-                    $("#likes").text(result.data + 1).addClass("red");
-                    $("#like-btn").addClass("red");
-                }
-            }
-        });
     });
 
     // 赞赏按钮
@@ -318,6 +276,30 @@
         headingSelector: 'h1, h2, h3'
     });
 
+    // 点击喜欢
+    $(document).on("click", "#like-btn", function () {
+        var blogId = $("#blogId").val();
+        $.ajax({
+            url: "/blogLike",
+            data: { blogId : blogId },
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+                if (result.code === 102) {
+                    // 提示去登陆或直接跳转至登陆页面
+                    layer.msg(result.message);
+                } else if (result.code === 300) {
+                    // 已经点赞过了
+                    layer.msg(result.message);
+                } else if (result.code === 301) {
+                    // 设置点赞数和变红
+                    $("#likes").text(result.data + 1).addClass("red");
+                    $("#like-btn").addClass("red");
+                }
+            }
+        });
+    });
+
     // 初始加载评论信息
     $(function () {
         // 请求路径
@@ -327,6 +309,7 @@
 
     // 提交评论
     $(document).on("click", "#comment-btn", function () {
+        // 校验评论
         var boo = $('.ui.form').form('validate form');
         if (boo) {
             console.log('校验成功');
@@ -345,23 +328,16 @@
                 parentCommentId: $("#parentCommentId").val(),
                 blogId: $("#blogId").val(),
                 nickname: $("#nickname").val(),
-                email: $("#email").val(),
                 content: $("#commentInfo").val()
             },
             success: function (result) {
                 $("#comment-container").html(result);
-                // 请求成功后，默认显示在评论第一条的位置
-                clearContent();
+                // 请求成功后，默认显示在评论第一条的位置，并将评论框内容清空
+                $("#commentInfo").val('').attr("placeholder", "请输入评论信息...");
+                // 将父评论的值设置-1
+                $("#parentCommentId").val(-1);
             }
         });
-    }
-
-    // 请求成功后
-    function clearContent() {
-        // 将评论框内容清空
-        $("#commentInfo").val('').attr("placeholder", "请输入评论信息...");
-        // 将父评论的值设置-1
-        $("#parentCommentId").val(-1);
     }
 
     // 点击回复事件
@@ -387,20 +363,6 @@
                     prompt: '请输入评论内容'
                 }
                 ]
-            },
-            content: {
-                identifier: 'nickname',
-                rules: [{
-                    type: 'empty',
-                    prompt: '请输入你的大名'
-                }]
-            },
-            type: {
-                identifier: 'email',
-                rules: [{
-                    type: 'email',
-                    prompt: '请填写正确的邮箱地址'
-                }]
             }
         }
     });

@@ -1,7 +1,9 @@
 package com.huidu.huidublog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.huidu.huidublog.enums.UserTypeEnum;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -16,6 +18,7 @@ import java.util.List;
  * @Description: 用户实体
  */
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "user")
 public class User {
@@ -72,16 +75,16 @@ public class User {
     @Fetch(FetchMode.SUBSELECT)
     private List<Role> roles = new ArrayList<>();
 
-//    @JsonIgnore // 转换成json格式时防止循环序列化
+    @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Blog> blogs = new ArrayList<>();
 
-    public User() {
-    }
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "user")
+//    private List<Comment> comments = new ArrayList<>();
 
     @Override
-    public String
-    toString() {
+    public String toString() {
         return "User{" +
                 "id=" + id +
                 ", nickname='" + nickname + '\'' +
@@ -92,6 +95,9 @@ public class User {
                 ", type=" + type +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
+                ", roles=" + roles +
+                ", blogs=" + blogs +
+//                ", comments=" + comments +
                 '}';
     }
 }

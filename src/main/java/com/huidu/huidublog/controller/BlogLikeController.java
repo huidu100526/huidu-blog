@@ -19,7 +19,7 @@ import java.security.Principal;
 /**
  * @auther huidu
  * @create 2020/2/27 22:42
- * @Description: 博客点赞相关controller
+ * @Description: 博客点赞controller
  */
 @RestController
 public class BlogLikeController {

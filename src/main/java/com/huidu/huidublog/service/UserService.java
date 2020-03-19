@@ -1,6 +1,7 @@
 package com.huidu.huidublog.service;
 
 import com.huidu.huidublog.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @auther huidu
@@ -8,12 +9,15 @@ import com.huidu.huidublog.entity.User;
  * @Description: 用户service
  */
 public interface UserService {
-    // 管理员登陆
-    User findUserByLogin(String username, String password);
-
     // 查询用户名是否存在
     User findByUsername(String username);
 
-    // 保存用户信息
-    void saveUser(User user);
+    // 保存注册用户信息
+    void saveNewUser(User user);
+
+    // 跟新用户信息
+    void updateUserInfo(User dbuser, User user);
+
+    // 上传图片
+    String uploadImage(MultipartFile file);
 }

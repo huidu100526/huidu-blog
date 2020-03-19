@@ -1,6 +1,8 @@
 package com.huidu.huidublog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -15,6 +17,7 @@ import java.util.List;
  * @Description: blog实体
  */
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "blog")
 public class Blog {
@@ -98,6 +101,7 @@ public class Blog {
 
     @OneToMany(mappedBy = "blog", fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
+    @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
@@ -111,9 +115,6 @@ public class Blog {
 
     @Transient // 这个字段不添加到数据库中，作为参数
     private String tagIds;
-
-    public Blog() {
-    }
 
     public void init() {
         this.tagIds = tagsToIds(this.getTags());

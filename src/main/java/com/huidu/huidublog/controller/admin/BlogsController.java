@@ -1,27 +1,24 @@
 package com.huidu.huidublog.controller.admin;
 
-import com.huidu.huidublog.vo.BlogQuery;
 import com.huidu.huidublog.entity.Blog;
 import com.huidu.huidublog.entity.Type;
-import com.huidu.huidublog.entity.User;
-import com.huidu.huidublog.service.BlogService;
-import com.huidu.huidublog.service.TagService;
-import com.huidu.huidublog.service.TypeService;
-import com.huidu.huidublog.service.UserLikeBlogService;
+import com.huidu.huidublog.enums.ResultEnum;
+import com.huidu.huidublog.service.*;
+import com.huidu.huidublog.vo.BlogQuery;
+import com.huidu.huidublog.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -34,6 +31,9 @@ import java.util.List;
 public class BlogsController {
     @Autowired
     private BlogService blogService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private TypeService typeService;
@@ -52,7 +52,7 @@ public class BlogsController {
         // 查询所有分类
         List<Type> listType = typeService.getListType();
         // 分页查询所有博客
-        Page<Blog> listBlog = blogService.getListBlog(pageable);
+        Page<Blog> listBlog = blogService.getListBlog(pageable, false);
         model.addAttribute("page", listBlog);
         model.addAttribute("types", listType);
         return "admin/blogs";
@@ -62,8 +62,8 @@ public class BlogsController {
      * 新增/修改博客
      */
     @PostMapping("/blogs")
-    public String post(Blog blog, RedirectAttributes attributes, HttpSession session) {
-        blog.setUser((User) session.getAttribute("user")); // 设置用户
+    public String post(@AuthenticationPrincipal Principal principal, Blog blog, RedirectAttributes attributes) {
+        blog.setUser(userService.findByUsername(principal.getName())); // 设置用户
         blog.setType(typeService.getType(blog.getType().getId())); // 设置分类
         blog.setTags(tagService.getListTag(blog.getTagIds())); // 设置标签
         Blog b;
@@ -129,5 +129,15 @@ public class BlogsController {
         userLikeBlogService.deleteBlogLikeByBolgId(id);
         attributes.addFlashAttribute("message", "删除成功");
         return "redirect:/admin/blogs";
+    }
+
+    /**
+     * 上传图片接口
+     */
+    @PostMapping("/blogs/upload")
+    @ResponseBody
+    public ResultVO upload(MultipartFile file) {
+        String imageUrl = userService.uploadImage(file);
+        return ResultVO.success(ResultEnum.SUCCESS.getCode(), ResultEnum.SUCCESS.getMessage(), imageUrl);
     }
 }

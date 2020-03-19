@@ -19,6 +19,10 @@ body {
     padding: 2em !important;
 }
 
+.m-padded-btn {
+    padding: 1em !important;
+}
+
 .m-padded-tb-mini {
     padding-top: 0.2em !important;
     padding-bottom: 0.2em !important;

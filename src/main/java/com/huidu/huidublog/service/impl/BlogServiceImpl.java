@@ -1,6 +1,5 @@
 package com.huidu.huidublog.service.impl;
 
-import com.huidu.huidublog.vo.BlogQuery;
 import com.huidu.huidublog.entity.Blog;
 import com.huidu.huidublog.entity.Type;
 import com.huidu.huidublog.exception.NotFoundException;
@@ -8,6 +7,7 @@ import com.huidu.huidublog.repository.BlogRepository;
 import com.huidu.huidublog.service.BlogService;
 import com.huidu.huidublog.utils.MarkdownUtils;
 import com.huidu.huidublog.utils.MyBeanUtils;
+import com.huidu.huidublog.vo.BlogQuery;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -94,8 +94,14 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Page<Blog> getListBlog(Pageable pageable) {
-        return blogRepository.findAll(pageable);
+    public Page<Blog> getListBlog(Pageable pageable, boolean flag) {
+        if (flag) {
+            // 首页查询已发布的博客
+            return blogRepository.findAllBlog(pageable);
+        } else {
+            // 查询所有
+            return blogRepository.findAll(pageable);
+        }
     }
 
     @Transactional
@@ -168,11 +174,5 @@ public class BlogServiceImpl implements BlogService {
         Blog blog = blogRepository.getOne(blogId);
         // 返回喜欢数
         return blog.getLikes();
-    }
-
-    @Transactional
-    @Override
-    public Integer lessLikeByBlogId(Long blogId) {
-        return null;
     }
 }

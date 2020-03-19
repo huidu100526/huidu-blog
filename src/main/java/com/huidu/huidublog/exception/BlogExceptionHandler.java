@@ -1,5 +1,7 @@
 package com.huidu.huidublog.exception;
 
+import com.huidu.huidublog.enums.ResultEnum;
+import com.huidu.huidublog.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,7 +29,21 @@ public class BlogExceptionHandler {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("url", request.getRequestURL());
         modelAndView.addObject("exception", e);
+        // 有其他异常跳转至错误页面
         modelAndView.setViewName("error/error");
         return modelAndView;
+    }
+
+    @ExceptionHandler(CheckValueException.class)
+    public ResultVO checkValueException(Exception e) {
+        e.printStackTrace();
+        // 返回错误信息
+        if (ResultEnum.FILE_IS_NULL.getMessage().equals(e.getMessage())) {
+            return ResultVO.fial(ResultEnum.FILE_IS_NULL.getCode(), e.getMessage());
+        } else if (ResultEnum.FILE_UPLOAD_FIAL.getMessage().equals(e.getMessage())) {
+            return ResultVO.fial(ResultEnum.FILE_UPLOAD_FIAL.getCode(), e.getMessage());
+        } else {
+            return null;
+        }
     }
 }

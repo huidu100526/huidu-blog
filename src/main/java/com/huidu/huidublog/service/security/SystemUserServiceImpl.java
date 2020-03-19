@@ -4,6 +4,7 @@ import com.huidu.huidublog.entity.Role;
 import com.huidu.huidublog.entity.User;
 import com.huidu.huidublog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,7 +25,7 @@ public class SystemUserServiceImpl implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws AuthenticationException {
         // 根据用户名查询用户信息
         User user = userRepository.findByUsername(username);
         if (user == null) {

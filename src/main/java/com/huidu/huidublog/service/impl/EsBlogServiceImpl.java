@@ -1,5 +1,6 @@
 package com.huidu.huidublog.service.impl;
 
+import com.huidu.huidublog.controller.IndexController;
 import com.huidu.huidublog.entity.EsBlog;
 import com.huidu.huidublog.repository.EsBlogRepository;
 import com.huidu.huidublog.service.EsBlogService;
@@ -20,6 +21,9 @@ public class EsBlogServiceImpl implements EsBlogService {
     @Autowired
     private EsBlogRepository esBlogRepository;
 
+    @Autowired
+    private IndexController indexController;
+
     @Override
     public Page<EsBlog> getListBlog(Pageable pageable) {
         return esBlogRepository.findAll(pageable);
@@ -29,12 +33,12 @@ public class EsBlogServiceImpl implements EsBlogService {
     public Page<EsBlog> getListBlog(Pageable pageable, String query) {
 //        Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
 //        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+//        Page<EsBlog> result = esBlogRepository.findDistinctEsBlogByTitleContainingOrDescriptionContainingOrContentContaining(query, query, query, pageable);
         BoolQueryBuilder builder = QueryBuilders.boolQuery();
         builder.should(QueryBuilders.matchPhraseQuery("title", query));
         builder.should(QueryBuilders.matchPhraseQuery("description", query));
         builder.should(QueryBuilders.matchPhraseQuery("content", query));
         Page<EsBlog> result = (Page<EsBlog>) esBlogRepository.search(builder);
-//        Page<EsBlog> result = esBlogRepository.findDistinctEsBlogByTitleContainingOrDescriptionContainingOrContentContaining(query, query, query, pageable);
         return result;
     }
 }

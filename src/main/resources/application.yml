@@ -19,16 +19,17 @@ spring:
   jpa:
     show-sql: false
     # 设置为当实体类改变则相应更新数据库表
-#    hibernate:
-#      ddl-auto: update
+    hibernate:
+      ddl-auto: update
   data:
     elasticsearch:
       cluster-name: elasticsearch
       cluster-nodes: 127.0.0.1:9300
-  # 连接redis
-#  redis:
-#    host: 192.168.1.128
-#    port: 6379
+  # 上传图片文件大小允许10MB以内
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
 
 logging:
   # 日志打印级别
@@ -40,3 +41,8 @@ logging:
 
 # 评论人默认头像
 comment.avatar: /images/avatar.png
+# minio文件服务器相关信息
+minio.minioUrl: http://localhost:9000
+minio.username: OVPYT83F1W8MKGBMP5X3
+minio.password: ZHysJLD+5NeFw38l9Td6kQ5v0t7n+8+RVp3rZBk7
+minio.bucketName: blog

@@ -1,0 +1,118 @@
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">设置我的个人信息</div>
+                <div class="layui-card-body" pad15>
+                    <form class="ui form">
+                        <div class="field">
+                            <img class="small ui middle aligned circular image" id="avatarImage">
+                            <input id="avatar" name="avatar" type="hidden">
+                            <a id="uploadAvatar" class="circular m-padded-btn teal ui button">更换头像</a>
+                        </div>
+                        <div class="field">
+                            <label>昵称</label>
+                            <input style="width: 30%" type="text" id="nickname" name="nickname" placeholder="昵称">
+                        </div>
+                        <div class="field">
+                            <label>用户名</label>
+                            <input style="width: 30%" type="text" readonly="" id="username" name="username" placeholder="用户名">
+                        </div>
+                        <div class="field">
+                            <label>邮箱</label>
+                            <input style="width: 30%" type="text" id="email" name="email" placeholder="填写你的邮箱">
+                        </div>
+                        <a class="circular ui orange button" onclick="saveUserInfo()" type="submit">保存</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // 初始化layer
+    var layer;
+    layui.use('layer', function(){
+        layer = layui.layer;
+    });
+
+    // 加载用户信息
+    $(function () {
+        $.ajax({
+            url: "/loadUserInfo",
+            success: function (result) {
+                console.log(result);
+                $("#avatarImage").attr("src", result.data.avatar);
+                $("#nickname").val(result.data.nickname);
+                $("#username").val(result.data.username);
+                $("#email").val(result.data.email);
+            }
+        });
+    });
+
+    // 跟换头像
+    layui.use('upload', function () {
+        var upload = layui.upload;
+        var uploadImage = upload.render({
+            elem: '#uploadAvatar', //绑定元素
+            url: '/user/upload', //上传接口
+            field: "file",
+            done: function (result) {
+                console.log(result);
+                if (result.code === 200) {
+                    // 头像赋值并预览
+                    $("#avatar").val(result.data);
+                    $("#avatarImage").attr("src", result.data);
+                } else {
+                    layer.msg(result.message, {time: 1500, icon: 2, shift: 5}, function () {});
+                }
+            },
+            error: function () {
+                //请求异常回调
+                layer.msg("上传失败，请重新上传", {time: 1500, icon: 2, shift: 5}, function () {});
+            }
+        });
+    });
+
+    // 跟新用户信息
+    function saveUserInfo() {
+        var nickname = $("#nickname").val();
+        if (nickname.trim() === "") {
+            layer.msg("昵称不能为空", {time: 1500, icon: 2, shift: 5}, function () {});
+            return;
+        } else if (nickname.length < 3 || nickname.length > 10) {
+            layer.msg("昵称长度3~10位", {time: 1500, icon: 2, shift: 5}, function () {});
+            return;
+        }
+        var email = $("#email").val();
+        var checkemail = /^([a-z0-9_.-]+)@([\da-z.-]+)\.([a-z.]{2,6})$/;
+        if (email.trim() === "") {
+            layer.msg("邮箱不能为空", {time: 1500, icon: 2, shift: 5}, function () {});
+            return;
+        }
+        if (!checkemail.test(email)) {
+            layer.msg("请填写正确的邮箱", {time: 1500, icon: 2, shift: 5}, function () {});
+            return;
+        }
+        // 头像
+        var avatar = $("#avatar").val();
+        $.ajax({
+            url: "/updateUserInfo",
+            type: "POST",
+            data: {
+                "nickname": nickname,
+                "email": email,
+                "avatar": avatar
+            },
+            success: function (result) {
+                console.log(result);
+                if (result.code === 200) {
+                    // 操作成功
+                    layer.msg(result.message, {time: 2500, icon: 1, shift: 5}, function () {});
+                } else {
+                    layer.msg("保存失败", {time: 1500, icon: 2, shift: 5}, function () {});
+                }
+            }
+        })
+    }
+</script>

@@ -1,7 +1,7 @@
 package com.huidu.huidublog.service;
 
-import com.huidu.huidublog.vo.BlogQuery;
 import com.huidu.huidublog.entity.Blog;
+import com.huidu.huidublog.vo.BlogQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -29,8 +29,8 @@ public interface BlogService {
     // 按分类条件进行分页查询
     Page<Blog> getListBlog(Pageable pageable, Long tagId);
 
-    // 分页查询博客列表(无条件)
-    Page<Blog> getListBlog(Pageable pageable);
+    // 分页查询博客列表(true查询首页发布博客，false查询所有列表)
+    Page<Blog> getListBlog(Pageable pageable, boolean flag);
 
     // 新增博客
     Blog saveBlog(Blog blog);
@@ -55,7 +55,4 @@ public interface BlogService {
 
     // 根据博客id添加喜欢数
     Integer addLikeByBlogId(Long blogId);
-
-    // 根据博客id减少喜欢数
-    Integer lessLikeByBlogId(Long blogId);
 }

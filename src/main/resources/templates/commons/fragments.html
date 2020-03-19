@@ -66,11 +66,11 @@
                     </div>
                     <i class="dropdown icon"></i>
                     <div class="menu">
-                        <a th:href="@{/toLogin}" class="item" sec:authorize="!isAuthenticated()">登录</a>
-                        <a th:href="@{/toRegister}" class="item" sec:authorize="!isAuthenticated()">注册</a>
-                        <a th:href="@{/toUserInfo}" class="item" sec:authorize="hasRole('ROLE_USER')">账号信息</a>
+                        <a th:href="@{/login}" class="item" sec:authorize="!isAuthenticated()">登录</a>
+                        <a th:href="@{/register}" class="item" sec:authorize="!isAuthenticated()">注册</a>
+                        <a th:href="@{/userCenter}" class="item" sec:authorize="hasRole('ROLE_USER')">个人中心</a>
                         <a th:href="@{/admin/blogs}" class="item" sec:authorize="hasRole('ROLE_ADMIN')">后台管理</a>
-                        <div sec:authorize="isAuthenticated()"><hr/></div>
+                        <div sec:authorize="isAuthenticated()"><hr style="margin: 10px 0 5px 0;"/></div>
                         <a th:href="@{/logout}" class="item" sec:authorize="isAuthenticated()">注销</a>
                     </div>
                 </div>

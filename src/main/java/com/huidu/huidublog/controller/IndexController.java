@@ -1,6 +1,9 @@
 package com.huidu.huidublog.controller;
 
-import com.huidu.huidublog.entity.*;
+import com.huidu.huidublog.entity.Blog;
+import com.huidu.huidublog.entity.Tag;
+import com.huidu.huidublog.entity.Type;
+import com.huidu.huidublog.entity.User;
 import com.huidu.huidublog.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,8 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.List;
 
@@ -49,13 +50,9 @@ public class IndexController {
      * 至博客首页
      */
     @GetMapping({"/", "/index"})
-    public String index(@PageableDefault(size = 6, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-                        HttpServletRequest request, HttpServletResponse response, Model model) {
-        // 判断是否有需要回跳的url，有则将需要回跳的url保存在响应头中
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("lastUrl", (String) request.getSession().getAttribute("lastUrl"));
-        // 分页查询所有博客
-        Page<Blog> listBlog = blogService.getListBlog(pageable);
+    public String index(@PageableDefault(size = 6, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable, Model model) {
+        // 分页查询所有已经发布的博客
+        Page<Blog> listBlog = blogService.getListBlog(pageable, true);
         // 获取使用最多的前6个分类
         List<Type> typeTop = typeService.getListTypeTop(6);
         // 获取使用最多的前6个标签
@@ -70,18 +67,31 @@ public class IndexController {
     }
 
     /**
-     * 博客首页全局搜索查询
+     * 博客首页全局搜索查询（mysql）
      */
     @PostMapping("/search")
-    public String search(@PageableDefault(size = 6) Pageable pageable,
+    public String searchByMysql(@PageableDefault(size = 8, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
                          @RequestParam String query, Model model) {
         // 按条件查询博客列表
-        Page<EsBlog> listBlog = esBlogService.getListBlog(pageable, query);
+        Page<Blog> listBlog = blogService.getListBlog(pageable, query);
         model.addAttribute("page", listBlog);
         // 返回查询条件至页面回显
         model.addAttribute("query", query);
         return "search";
     }
+
+//    /**
+//     * 博客首页全局搜索查询（es）
+//     */
+//    @PostMapping("/search")
+//    public String searchByEs(@PageableDefault(size = 6) Pageable pageable, @RequestParam String query, Model model) {
+//        // 按条件查询博客列表
+//        Page<EsBlog> listBlog = esBlogService.getListBlog(pageable, query);
+//        model.addAttribute("page", listBlog);
+//        // 返回查询条件至页面回显
+//        model.addAttribute("query", query);
+//        return "search";
+//    }
 
     /**
      * 跳转至某篇博客详情页面

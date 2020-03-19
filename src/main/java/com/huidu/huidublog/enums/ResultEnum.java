@@ -24,10 +24,13 @@ public enum ResultEnum {
     USER_NULL(104, "用户不存在，请先注册"),
     FIAL_LOGIN(105, "用户名或密码错误！"),
 
-    SUCCESS(200, "成功"),
+    SUCCESS(200, "操作成功"),
 
     BLOG_HAS_LIKE(300, "已经点赞过啦~"),
-    SUCCESS_LIKE_BLOG(301, "点赞成功")
+    SUCCESS_LIKE_BLOG(301, "点赞成功"),
+
+    FILE_IS_NULL(400, "请重新选择图片"),
+    FILE_UPLOAD_FIAL(401, "上传图片失败")
 
     ;
 

@@ -1,6 +1,7 @@
 package com.huidu.huidublog.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
  * @Description: 评论实体
  */
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "comment")
 public class Comment {
@@ -44,6 +46,9 @@ public class Comment {
     @ManyToOne
     private Blog blog;
 
+//    @ManyToOne
+//    private User user;
+
     /**
      * 自关联
      */
@@ -58,9 +63,6 @@ public class Comment {
      */
     private boolean adminComment;
 
-    public Comment() {
-    }
-
     @Override
     public String toString() {
         return "Comment{" +
@@ -69,6 +71,11 @@ public class Comment {
                 ", content='" + content + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", createTime=" + createTime +
+                ", blog=" + blog +
+//                ", user=" + user +
+                ", replyComments=" + replyComments +
+                ", parentComment=" + parentComment +
+                ", adminComment=" + adminComment +
                 '}';
     }
 }

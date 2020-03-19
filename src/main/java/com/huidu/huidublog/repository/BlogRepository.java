@@ -17,6 +17,10 @@ import java.util.List;
  * @Description: 博客资源类
  */
 public interface BlogRepository extends JpaRepository<Blog, Long>, JpaSpecificationExecutor<Blog> {
+    // 查询所有已经发布的文章
+    @Query("select b from Blog b where b.published = true")
+    Page<Blog> findAllBlog(Pageable pageable);
+
     // 查询最新推荐的前几篇博客
     @Query("select b from Blog b where b.recommend = true")
     List<Blog> findBlogTop(Pageable pageable);
