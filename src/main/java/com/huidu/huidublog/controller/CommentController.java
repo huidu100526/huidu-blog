@@ -4,6 +4,7 @@ import com.huidu.huidublog.annotation.PermissionCheck;
 import com.huidu.huidublog.entity.Blog;
 import com.huidu.huidublog.entity.Comment;
 import com.huidu.huidublog.entity.User;
+import com.huidu.huidublog.enums.UserRoleEnum;
 import com.huidu.huidublog.service.BlogService;
 import com.huidu.huidublog.service.CommentService;
 import com.huidu.huidublog.service.UserService;
@@ -57,7 +58,8 @@ public class CommentController {
         Blog blog = blogService.getBlog(blogId);
         comment.setBlog(blog);
         comment.setUser(user);
-        if (user.getType() == 1) { // 是管理员才设置为true
+        if (user.getRoles().get(0).getName().equals(UserRoleEnum.ROLE_ADMIN.name())) {
+            // 是管理员才设置为true，博主标识
             comment.setAdminComment(true);
         }
         // 根据评论内容和父标签id进行保存评论信息

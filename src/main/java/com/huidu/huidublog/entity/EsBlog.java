@@ -14,7 +14,7 @@ import java.util.Date;
  * @Description: elasticsearch文档类
  */
 @Data
-@Document(indexName = "huidu_blog", type = "doc")
+@Document(indexName = "huidu_blog", type = "blog")
 public class EsBlog {
     @Id
     private Long id;
@@ -28,10 +28,10 @@ public class EsBlog {
     @Field(type = FieldType.Text)
     private String content;
 
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Keyword)
     private String firstPicture;
 
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Keyword)
     private String flag;
 
     @Field(type = FieldType.Long)
@@ -46,6 +46,7 @@ public class EsBlog {
     @Field(type = FieldType.Boolean)
     private boolean shareStatement;
 
+    @Field(type = FieldType.Boolean)
     private boolean commentabled;
 
     @Field(type = FieldType.Boolean)

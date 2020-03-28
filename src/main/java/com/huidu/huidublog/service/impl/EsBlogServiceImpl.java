@@ -1,6 +1,5 @@
 package com.huidu.huidublog.service.impl;
 
-import com.huidu.huidublog.controller.IndexController;
 import com.huidu.huidublog.entity.EsBlog;
 import com.huidu.huidublog.repository.EsBlogRepository;
 import com.huidu.huidublog.service.EsBlogService;
@@ -20,9 +19,6 @@ import org.springframework.stereotype.Service;
 public class EsBlogServiceImpl implements EsBlogService {
     @Autowired
     private EsBlogRepository esBlogRepository;
-
-    @Autowired
-    private IndexController indexController;
 
     @Override
     public Page<EsBlog> getListBlog(Pageable pageable) {

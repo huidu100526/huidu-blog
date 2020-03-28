@@ -40,9 +40,11 @@ logging:
   file: log/blog.log
 
 # 评论人默认头像
-comment.avatar: /images/avatar.png
+comment.avatar: /images/default-avatar.png
 # minio文件服务器相关信息
 minio.minioUrl: http://localhost:9000
 minio.username: OVPYT83F1W8MKGBMP5X3
 minio.password: ZHysJLD+5NeFw38l9Td6kQ5v0t7n+8+RVp3rZBk7
 minio.bucketName: blog
+# 邮箱校验格式
+email.checkString: ^([a-z0-9A-Z]+[-|.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\.)+[a-zA-Z]{2,}$

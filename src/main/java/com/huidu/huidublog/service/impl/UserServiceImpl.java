@@ -62,6 +62,7 @@ public class UserServiceImpl implements UserService {
             // 截取图片格式
             String fileNameEnd = originalFilename.substring(originalFilename.lastIndexOf("."));
             fileName.append(fileNamefix).append(fileNameEnd);
+            // 调用minio API进行图片上传，返回图片访问路径
             String imageUrl = MinioUtils.uploadFile(file, fileName.toString(),
                     MINIO_SERVER_URL, MINIO_USERNAME, MINIO_PASSWORD, MINIO_BUCKET_NAME);
             // TODO 将图片写入缓存，当该篇博客删除时，将该博客图片缓存全部删除

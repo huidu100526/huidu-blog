@@ -41,7 +41,7 @@ public class LogAspect {
             String classMethod = joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();
             Object[] args = joinPoint.getArgs();
             RequestLog requestLog = new RequestLog(url, ip, classMethod, args);
-            log.info("Request: {}", requestLog); // 打印信息
+            log.info("【请求信息】: {}", requestLog); // 打印信息
         }
     }
 
@@ -55,15 +55,16 @@ public class LogAspect {
      * 将controller方法返回的值打印
      */
     @AfterReturning(returning = "result",pointcut = "log()")
-    public void doAfterRuturn(Object result) {
-        log.info("Result: {}", result);
+    public void doAfterRuturn(JoinPoint joinPoint, Object result) {
+        String methodName = joinPoint.getSignature().getName();
+        log.info("【" + methodName + "方法返回结果】: {}", result);
     }
 
     private class RequestLog {
-        private String url;
-        private String ip;
-        private String classMethod;
-        private Object[] args;
+        private String url; // 请求路径
+        private String ip; // 请求ip地址
+        private String classMethod; // 请求方法名
+        private Object[] args; // 请求参数
 
         RequestLog(String url, String ip, String classMethod, Object[] args) {
             this.url = url;

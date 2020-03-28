@@ -10,9 +10,7 @@ import lombok.Data;
 @Data
 public class ResultVO {
     /**
-     * 结果状态码：
-     *      100、错误
-     *      200、成功
+     * 结果状态码
      */
     private Integer code;
 

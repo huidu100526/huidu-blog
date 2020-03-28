@@ -1,7 +1,6 @@
 package com.huidu.huidublog.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.huidu.huidublog.enums.UserTypeEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
@@ -57,11 +56,6 @@ public class User {
     private String userProfile;
 
     /**
-     * 用户类型
-     */
-    private Integer type = UserTypeEnum.USER.getCode();
-
-    /**
      * 创建时间
      */
     @Temporal(TemporalType.TIMESTAMP)
@@ -98,7 +92,6 @@ public class User {
                 ", email='" + email + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", userProfile='" + userProfile + '\'' +
-                ", type=" + type +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';

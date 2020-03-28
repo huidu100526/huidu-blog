@@ -40,7 +40,7 @@ public class PrincipalAspect {
         String loginName = authentication.getName();
         // 校验是否登陆，等于 anonymousUser 说明没有登陆
         if (loginName.equals(ANONYMOUS_USER)) {
-            log.info("【登陆校验】用户未登陆");
+            log.error("【登陆校验】用户未登陆");
             return ResultVO.fial(ResultEnum.USER_NOT_LOGIN.getCode(), ResultEnum.USER_NOT_LOGIN.getMessage());
         }
         // 拿到接口的权限
@@ -52,7 +52,7 @@ public class PrincipalAspect {
                 return joinPoint.proceed();
             }
         }
-        log.info("【权限校验】用户权限不足");
+        log.error("【权限校验】用户权限不足");
         return ResultVO.fial(ResultEnum.USER_NOT_AUTHORITY.getCode(), ResultEnum.USER_NOT_AUTHORITY.getMessage());
     }
 }

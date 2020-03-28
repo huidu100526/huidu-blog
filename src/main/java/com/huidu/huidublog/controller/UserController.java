@@ -9,6 +9,7 @@ import com.huidu.huidublog.repository.RoleRepositoey;
 import com.huidu.huidublog.service.UserService;
 import com.huidu.huidublog.utils.MD5Utils;
 import com.huidu.huidublog.vo.ResultVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,10 +29,15 @@ import java.util.List;
  * @Description: 用户操作相关controller
  */
 @RestController
+@Slf4j
 public class UserController {
     // 注入默认的头像信息
     @Value("${comment.avatar}")
     private String USER_DEFAULT_AVATAR;
+
+    // 注入邮箱校验规则
+    @Value("${email.checkString}")
+    private String CHECK_EMAIL_STRING;
 
     @Autowired
     private UserService userService;
@@ -60,6 +66,7 @@ public class UserController {
             userService.saveUser(user);
         } else {
             // 账号存在则返回错误信息
+            log.error("【注册校验】用户名已存在");
             return ResultVO.fial(ResultEnum.USER_REPEAT.getCode(), ResultEnum.USER_REPEAT.getMessage());
         }
         // 注册成功
@@ -101,8 +108,7 @@ public class UserController {
         dbuser.setNickname(user.getNickname());
         // 如果邮箱有值则校验邮箱
         if (!"".equals(user.getEmail())) {
-            String regex = "^([a-z0-9A-Z]+[-|.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
-            if (user.getEmail().matches(regex)) {
+            if (user.getEmail().matches(CHECK_EMAIL_STRING)) {
                 dbuser.setEmail(user.getEmail());
             } else {
                 // 邮箱不合法

@@ -7,6 +7,7 @@ import com.huidu.huidublog.enums.ResultEnum;
 import com.huidu.huidublog.service.BlogService;
 import com.huidu.huidublog.service.UserLikeBlogService;
 import com.huidu.huidublog.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import java.security.Principal;
  * @Description: 博客点赞controller
  */
 @RestController
+@Slf4j
 public class BlogLikeController {
     @Autowired
     private BlogService blogService;
@@ -39,14 +41,11 @@ public class BlogLikeController {
     @ResponseBody
     @PermissionCheck(value = "ROLE_USER")
     public ResultVO blogLike(@AuthenticationPrincipal Principal principal, @RequestParam Long blogId) {
-        // 需要用户先登陆才能操作
-        if (principal == null) {
-            return ResultVO.fial(ResultEnum.USER_NOT_LOGIN.getCode(), ResultEnum.USER_NOT_LOGIN.getMessage());
-        }
         String username = principal.getName();
         User user = userService.findByUsername(username);
         // 如果存在点赞记录返回信息
         if (userLikeBlogService.isLikeByBlogId(blogId, user.getId())) {
+            log.error("【点赞校验】存在用户点赞记录");
             return ResultVO.fial(ResultEnum.BLOG_HAS_LIKE.getCode(), ResultEnum.BLOG_HAS_LIKE.getMessage());
         }
         // 博客添加喜欢数

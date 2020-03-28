@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 public class BlogExceptionHandler {
     @ExceptionHandler(Exception.class) // 有此注解才会进入此方法，标识拦截的异常
     public ModelAndView exceptionHandler(HttpServletRequest request, Exception e) throws Exception {
-        log.error("Request URL: {}, Exception: {}", request.getRequestURL(), e);
+        log.error("【异常拦截】url: {}, Exception: {}", request.getRequestURL(), e);
         // 如果有指定异常则直接抛出给springboot进行处理，则不会跳转至自定义错误页面
         if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null) {
             throw e;
@@ -36,11 +36,12 @@ public class BlogExceptionHandler {
 
     @ExceptionHandler(CheckValueException.class)
     public ResultVO checkValueException(Exception e) {
-        e.printStackTrace();
         // 返回错误信息
         if (ResultEnum.FILE_IS_NULL.getMessage().equals(e.getMessage())) {
+            log.error("【图片上传】用户未选择图片");
             return ResultVO.fial(ResultEnum.FILE_IS_NULL.getCode(), e.getMessage());
         } else if (ResultEnum.FIAL_FILE_UPLOAD.getMessage().equals(e.getMessage())) {
+            log.error("【图片上传】上传出错");
             return ResultVO.fial(ResultEnum.FIAL_FILE_UPLOAD.getCode(), e.getMessage());
         } else {
             return null;

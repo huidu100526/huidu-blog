@@ -71,7 +71,7 @@ public class IndexController {
      */
     @PostMapping("/search")
     public String searchByMysql(@PageableDefault(size = 8, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-                         @RequestParam String query, Model model) {
+                                @RequestParam String query, Model model) {
         // 按条件查询博客列表
         Page<Blog> listBlog = blogService.getListBlog(pageable, query);
         model.addAttribute("page", listBlog);
