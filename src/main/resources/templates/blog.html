@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head th:replace="commons/fragments :: head(~{::title})">
-    <title th:text="${blog.title}">博客详情</title>
+    <title th:text="${blog.title}"></title>
 </head>
 
 <body>
@@ -41,7 +41,7 @@
         <div class="ui attached padded segment">
             <!-- 所属标记 -->
             <div class="ui aligned basic segment">
-                <div class="ui orange basic label m-padded-small" th:text="${blog.flag}"></div>
+                <div class="ui orange label m-padded-small" th:text="${blog.flag}"></div>
             </div>
             <!-- 标题 -->
             <h2 class="ui center aligned header" th:text="${blog.title}"></h2>

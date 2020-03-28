@@ -11,6 +11,10 @@ body {
     padding: 0.3em !important;
 }
 
+.m-padded-tinys {
+    padding: 0.4em !important;
+}
+
 .m-padded-small {
     padding: 0.8em !important;
 }
@@ -21,6 +25,10 @@ body {
 
 .m-padded-btn {
     padding: 1em !important;
+}
+
+.m-padded-btn-big {
+    padding: 2em !important;
 }
 
 .m-padded-tb-mini {

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="commons/fragments :: head(~{::title})">
-    <title>归档</title>
+    <title>归档 | 辉肚的博客</title>
 </head>
 
 <body>
@@ -35,7 +35,7 @@
                         <!-- 日期 -->
                         <div class="ui teal basic left pointing label m-padded-mini" th:text="${#dates.format(blog.updateTime,'MMMdd')}"></div>
                     </span>
-                    <div class="ui orange basic left pointing label m-padded-mini" th:text="${blog.flag}"></div>
+                    <div class="ui orange left pointing label m-padded-tinys" th:text="${blog.flag}"></div>
                 </a>
             </div>
         </th:block>
@@ -43,9 +43,7 @@
 </div>
 <!-- 回到顶部 -->
 <div id="toolbar" class="m-padded m-fixed m-right-bottom" style="display: none">
-    <div class="ui error vertical icon buttons">
-        <div id="toTop-button" class="ui red icon button"><i class="chevron up icon"></i></div>
-    </div>
+    <div id="toTop-button" class="ui red circular icon button m-padded-btn"><i class="arrow up icon"></i></div>
 </div>
 <br><br>
 
