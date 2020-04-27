@@ -44,6 +44,17 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(comment);
     }
 
+//    @Override
+//    public boolean hasCommentByBlogId(Long blogId) {
+//        commentRepository
+//        return false;
+//    }
+//
+//    @Override
+//    public void deleteCommentByBlogId(Long blogId) {
+//
+//    }
+
 
     /**
      * 循环每个顶级的评论节点

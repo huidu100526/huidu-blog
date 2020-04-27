@@ -41,8 +41,8 @@
                 <td th:text="${role.name}"></td>
                 <td th:text="${role.description}"></td>
                 <td>
-                    <a href="#" th:href="@{/admin/roles/input/{id}(id=${role.id})}" class="ui mini teal basic button">修改</a>
-                    <a href="#" th:href="@{/admin/roles/delete/{id}(id=${role.id})}" class="ui mini red basic button">删除</a>
+                    <a href="#" th:href="@{/admin/roles/{id}/input(id=${role.id})}" class="ui mini teal basic button">修改</a>
+                    <a href="#" th:href="@{/admin/roles/{id}/delete(id=${role.id})}" class="ui mini red basic button">删除</a>
                 </td>
             </tr>
             </tbody>

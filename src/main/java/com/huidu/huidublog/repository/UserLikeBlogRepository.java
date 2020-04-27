@@ -12,6 +12,9 @@ public interface UserLikeBlogRepository extends JpaRepository<UserLikeBlog, Long
     // 根据博客id和用户id查询点赞记录
     UserLikeBlog findUserLikeBlogByBlogIdAndUserId(Long blogId, Long userId);
 
-    // 根据博客id删除点赞记录
-    void deleteUserLikeBlogByBlogId(Long blogId);
+//    // 根据博客id删除点赞记录
+//    void deleteUserLikeBlogByBlogId(Long blogId);
+//
+//    // 根据博客id查询是否存在与该博客相关点赞记录
+//    UserLikeBlog findUserLikeBlogByBlogId(Long blogId);
 }

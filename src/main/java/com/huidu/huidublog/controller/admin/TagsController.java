@@ -78,7 +78,7 @@ public class TagsController {
     /**
      * 跳转至修改标签页面
      */
-    @GetMapping("/tags/input/{id}")
+    @GetMapping("/tags/{id}/input")
     public String editInput(@PathVariable Long id, Model model) {
         // 根据id获取标签
         Tag tag = tagService.getTag(id);
@@ -89,7 +89,7 @@ public class TagsController {
     /**
      * 删除标签
      */
-    @GetMapping("/tags/delete/{id}")
+    @GetMapping("/tags/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes attributes) {
         tagService.deleteTag(id);
         attributes.addFlashAttribute("message", "删除成功");

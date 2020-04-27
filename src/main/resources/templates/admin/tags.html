@@ -39,8 +39,8 @@
                 <td th:text="${iterStat.count}"></td>
                 <td th:text="${type.name}"></td>
                 <td>
-                    <a href="#" th:href="@{/admin/tags/input/{id}(id=${type.id})}" class="ui mini teal basic button">修改</a>
-                    <a href="#" th:href="@{/admin/tags/delete/{id}(id=${type.id})}" class="ui mini red basic button">删除</a>
+                    <a href="#" th:href="@{/admin/tags/{id}/input(id=${type.id})}" class="ui mini teal basic button">修改</a>
+                    <a href="#" th:href="@{/admin/tags/{id}/delete(id=${type.id})}" class="ui mini red basic button">删除</a>
                 </td>
             </tr>
             </tbody>

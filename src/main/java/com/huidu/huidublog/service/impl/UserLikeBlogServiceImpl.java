@@ -32,8 +32,16 @@ public class UserLikeBlogServiceImpl implements UserLikeBlogService {
         userLikeBlogRepository.save(userLikeBlog);
     }
 
-    @Override
-    public void deleteBlogLikeByBolgId(Long blogId) {
-        userLikeBlogRepository.deleteUserLikeBlogByBlogId(blogId);
-    }
+//    @Override
+//    public boolean hasLikeByBlogId(Long blogId) {
+//        UserLikeBlog userLikeBlog = userLikeBlogRepository.findUserLikeBlogByBlogId(blogId);
+//        // 如果为空则不存在
+//        return userLikeBlog != null;
+//    }
+//
+//    @Override
+//    @Transactional
+//    public void deleteBlogLikeByBolgId(Long blogId) {
+//        userLikeBlogRepository.deleteUserLikeBlogByBlogId(blogId);
+//    }
 }

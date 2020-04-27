@@ -50,7 +50,7 @@ public class IndexController {
      * 至博客首页
      */
     @GetMapping({"/", "/index"})
-    public String index(@PageableDefault(size = 6, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable, Model model) {
+    public String index(@PageableDefault(size = 5, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable, Model model) {
         // 分页查询所有已经发布的博客
         Page<Blog> listBlog = blogService.getListBlog(pageable, true);
         // 获取使用最多的前6个分类

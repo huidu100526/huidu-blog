@@ -75,7 +75,7 @@ public class RolesController {
     /**
      * 跳转至修改角色页面
      */
-    @GetMapping("/roles/input/{id}")
+    @GetMapping("/roles/{id}/input")
     public String editInput(@PathVariable Long id, Model model) {
         // 根据id获取角色
         Role role = roleService.getRole(id);
@@ -86,7 +86,7 @@ public class RolesController {
     /**
      * 删除角色
      */
-    @GetMapping("/roles/delete/{id}")
+    @GetMapping("/roles/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes attributes) {
         roleService.deleteRole(id);
         attributes.addFlashAttribute("message", "删除成功");

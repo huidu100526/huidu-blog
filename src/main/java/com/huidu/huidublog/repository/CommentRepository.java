@@ -14,4 +14,8 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     // 根据博客id和没有子评论的情况按评论时间倒序的查询评论列表
     List<Comment> findByBlogIdAndParentCommentNull(Long blogId, Sort sort);
+
+//    // 根据博客id查询是否存在与该博客相关的评论记录
+//    @Query("select b from Comment b where b.blog")
+//    List<Comment> findCommentsByBlogId();
 }

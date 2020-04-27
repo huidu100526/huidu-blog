@@ -77,7 +77,7 @@ public class TypesController {
     /**
      * 跳转至修改分类页面
      */
-    @GetMapping("/types/input/{id}")
+    @GetMapping("/types/{id}/input")
     public String editInput(@PathVariable Long id, Model model) {
         // 根据分类id查询分类
         Type type = typeService.getType(id);
@@ -88,7 +88,7 @@ public class TypesController {
     /**
      * 删除分类
      */
-    @GetMapping("/types/delete/{id}")
+    @GetMapping("/types/{id}/delete")
     public String deleteType(@PathVariable Long id, RedirectAttributes attributes) {
         typeService.deleteType(id);
         attributes.addFlashAttribute("message", "删除成功");

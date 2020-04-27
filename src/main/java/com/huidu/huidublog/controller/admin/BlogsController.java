@@ -109,7 +109,7 @@ public class BlogsController {
     /**
      * 跳转到编辑博客页面
      */
-    @GetMapping("/blogs/input/{id}")
+    @GetMapping("/blogs/{id}/input")
     public String editInput(@PathVariable Long id, Model model) {
         model.addAttribute("types", typeService.getListType());
         model.addAttribute("tags", tagService.getListTag());
@@ -122,11 +122,14 @@ public class BlogsController {
     /**
      * 删除博客
      */
-    @GetMapping("/blogs/delete/{id}")
+    @GetMapping("/blogs/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes attributes) {
         blogService.deleteBlog(id);
-        // 同时删除博客喜欢记录
-        userLikeBlogService.deleteBlogLikeByBolgId(id);
+//        // 判断该博客是否存在相关点赞记录
+//        if (userLikeBlogService.hasLikeByBlogId(id)) {
+//            // 如果存在则删除相关记录
+//            userLikeBlogService.deleteBlogLikeByBolgId(id);
+//        }
         attributes.addFlashAttribute("message", "删除成功");
         return "redirect:/admin/blogs";
     }

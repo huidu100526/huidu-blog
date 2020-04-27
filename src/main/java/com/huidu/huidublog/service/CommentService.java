@@ -15,4 +15,10 @@ public interface CommentService {
 
     // 保存评论
     void saveComment(Comment comment, Long parentCommentId);
+
+//    // 根据博客id查询是否存在与该博客相关的评论记录
+//    boolean hasCommentByBlogId(Long blogId);
+//
+//    // 根据博客id删除相关评论
+//    void deleteCommentByBlogId(Long blogId);
 }
